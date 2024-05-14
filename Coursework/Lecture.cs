@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Coursework
 {
@@ -83,7 +84,7 @@ namespace Coursework
     public class Chapter : ICompositeElement
     {
         string name;
-        protected List<Lecture> lectures = new List<Lecture>();
+        protected List<LectureState> lectures = new List<LectureState>();
 
         public string Name
         {
@@ -95,12 +96,12 @@ namespace Coursework
             this.name = name;
         }
 
-        public void Add(Lecture lecture)
+        public void Add(LectureState lecture)
         {
             lectures.Add(lecture);
         }
 
-        public void Remove(Lecture lecture)
+        public void Remove(LectureState lecture)
         {
             lectures.Remove(lecture);
         }
@@ -122,29 +123,176 @@ namespace Coursework
             }
         }
     }
-
-    public class Lecture : ICompositeElement, ICloneableLecture
+    public class UnfinishedLectureState : LectureState
     {
-        public string Name { get; set; }
-        public string Text { get; set; }
-        public string URL { get; set; }
-        public string FilePath { get; set; }
-        public Lecture() { }
-        public Lecture(string name)
+        public override void ShowText()
         {
-            Name = name;
+            Console.WriteLine(Text);
         }
-
-        public void ShowWholeInternalStructure()
+        public override void OpenURLs()
         {
-            Console.WriteLine(Name);
+            foreach (string url in URLs)
+            {
+                try
+                {
+                    Process.Start(url);
+                }
+                catch
+                {
+                    Console.WriteLine("One of URLs can't be open, try to change it");
+                }
+            }
         }
-        
-        public void ShowOnlyChildren() { }
-
-        public Lecture Clone()
+        public override void OpenFiles()
         {
-            return (Lecture)MemberwiseClone();
+            foreach (string filePath in FilesPaths)
+            {
+                try
+                {
+                    Process.Start(filePath);
+                }
+                catch
+                {
+                    Console.WriteLine("One of files' paths can't be open, try to change it");
+                }
+            }
+        }
+        public override void ChangeText(string text)
+        {
+            Text = text;
+        }
+        public override void ChangeURLs(string urls)
+        {
+            URLs = urls.Split(" ");
+        }
+        public override void ChangeFilesPaths(string filesPaths)
+        {
+            FilesPaths = filesPaths.Split(" ");
+        }
+    }
+    public class FinishedLectureState : LectureState
+    {
+        public override void ShowText()
+        {
+            Console.WriteLine(Text);
+        }
+        public override void OpenURLs()
+        {
+            foreach (string url in URLs)
+            {
+                try
+                {
+                    Process.Start(url);
+                }
+                catch
+                {
+                    Console.WriteLine("One of URLs can't be open, try to change it");
+                }
+            }
+        }
+        public override void OpenFiles()
+        {
+            foreach (string filePath in FilesPaths)
+            {
+                try
+                {
+                    Process.Start(filePath);
+                }
+                catch
+                {
+                    Console.WriteLine("One of files' paths can't be open, try to change it");
+                }
+            }
+        }
+        public override void ChangeText(string text)
+        {
+            throw new Exception("You can't change finished lecture");
+        }
+        public override void ChangeURLs(string urls)
+        {
+            throw new Exception("You can't change finished lecture");
+        }
+        public override void ChangeFilesPaths(string filesPaths)
+        {
+            throw new Exception("You can't change finished lecture");
+        }
+    }
+    public class AdminLectureState : LectureState
+    {
+        AdminCheckingUserInterface adminCheckingUserInterface = new AdminCheckingUserInterface();
+        public override void ShowText()
+        {
+            if (!adminCheckingUserInterface.CheckAccess())
+            {
+                return;
+            }
+
+            Console.WriteLine(Text);
+        }
+        public override void OpenURLs()
+        {
+            if (!adminCheckingUserInterface.CheckAccess())
+            {
+                return;
+            }
+
+            foreach (string url in URLs)
+            {
+                try
+                {
+                    Process.Start(url);
+                }
+                catch
+                {
+                    Console.WriteLine("One of URLs can't be open, try to change it");
+                }
+            }
+        }
+        public override void OpenFiles()
+        {
+            if (!adminCheckingUserInterface.CheckAccess())
+            {
+                return;
+            }
+
+            foreach (string filePath in FilesPaths)
+            {
+                try
+                {
+                    Process.Start(filePath);
+                }
+                catch
+                {
+                    Console.WriteLine("One of files' paths can't be open, try to change it");
+                }
+            }
+        }
+        public override void ChangeText(string text)
+        {
+            if (!adminCheckingUserInterface.CheckAccess())
+            {
+                return;
+            }
+
+            Text = text;
+        }
+        public override void ChangeURLs(string urls)
+        {
+            if (!adminCheckingUserInterface.CheckAccess())
+            {
+                return;
+            }
+
+            URLs = urls.Split(" ");
+        }
+        public override void ChangeFilesPaths(string filesPaths)
+        {
+            if (!adminCheckingUserInterface.CheckAccess())
+            {
+                return;
+            }
+
+            FilesPaths = filesPaths.Split(" ");
         }
     }
 }

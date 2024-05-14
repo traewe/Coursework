@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,12 +9,13 @@ namespace Coursework
 {
     public static class Program
     {
-        public static string enteredPassword = "defaultPassword";
+        public static string enteredPassword;
+        public static IUserInterface userInterface;
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
             
-            IUserInterface userInterface = new AdminCheckingUserInterface();
+            userInterface = new AdminCheckingUserInterface();
 
             while (true)
             {

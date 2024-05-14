@@ -6,12 +6,20 @@ using System.Threading.Tasks;
 
 namespace Coursework
 {
-    public class LectureBuilder : ILectureBuilder
+    public class LectureStateBuilder : ILectureBuilder
     {
-        Lecture lecture;
-        public void Reset()
+        LectureState lecture;
+        public void ResetForUnfinishedState()
         {
-            lecture = new Lecture();
+            lecture = new UnfinishedLectureState();
+        }
+        public void ResetForFinishedState()
+        {
+            lecture = new UnfinishedLectureState();
+        }
+        public void ResetForAdminState()
+        {
+            lecture = new AdminLectureState();
         }
         public void SetName(string name)
         {
@@ -24,13 +32,13 @@ namespace Coursework
 
         public void SetURL(string url)
         {
-            lecture.URL = url;
+            lecture.URLs = url.Split(" ");
         }
-        public void SetFilePath(string filePath)
+        public void SetFilesPaths(string filePath)
         {
-            lecture.FilePath = filePath;
+            lecture.FilesPaths = filePath.Split(" ");
         }
-        public Lecture GetLecture()
+        public LectureState GetLecture()
         {
             return lecture;
         }
