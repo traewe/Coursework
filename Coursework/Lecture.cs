@@ -7,6 +7,10 @@ namespace Coursework
     {
         void ShowInternalStructure();
     }
+    interface ICloneableLecture
+    {
+        Lecture Clone();
+    }
     public class SubjectsCollection : ICompositeElement
     {
         protected List<Subject> subjects = new List<Subject>();
@@ -109,11 +113,12 @@ namespace Coursework
         }
     }
 
-    public class Lecture : ICompositeElement
+    public class Lecture : ICompositeElement, ICloneableLecture
     {
         public string Name { get; set; }
         public string Text { get; set; }
         public string URL { get; set; }
+        public string FilePath { get; set; }
         public Lecture() { }
         public Lecture(string name)
         {
@@ -123,6 +128,10 @@ namespace Coursework
         public void ShowInternalStructure()
         {
             Console.WriteLine(Name);
+        }
+        public Lecture Clone()
+        {
+            return (Lecture)MemberwiseClone();
         }
     }
 }

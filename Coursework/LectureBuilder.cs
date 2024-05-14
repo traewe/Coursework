@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Coursework
 {
-    public interface ILectureBuilder
+    interface ILectureBuilder
     {
         void Reset();
         void SetName(string name);
         void SetText(string text);
         void SetURL(string url);
+        void SetFilePath(string filePath);
     }
     public class LectureBuilder : ILectureBuilder
     {
@@ -33,7 +34,10 @@ namespace Coursework
         {
             lecture.URL = url;
         }
-
+        public void SetFilePath(string filePath)
+        {
+            lecture.FilePath = filePath;
+        }
         public Lecture GetLecture()
         {
             return lecture;

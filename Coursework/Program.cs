@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Coursework
 {
@@ -7,7 +8,7 @@ namespace Coursework
     {
         static void Main(string[] args)
         {
-            // Creating lectures
+            /*// Creating lectures
             Lecture lecture1 = new Lecture("Introduction to Programming");
             Lecture lecture2 = new Lecture("Data Structures and Algorithms");
             Lecture lecture3 = new Lecture("Object-Oriented Programming");
@@ -30,7 +31,7 @@ namespace Coursework
             subjectsCollection.Add(subject1);
 
             // Displaying internal structure
-            subjectsCollection.ShowInternalStructure();
+            subjectsCollection.ShowInternalStructure();*/
         }
     }
 
