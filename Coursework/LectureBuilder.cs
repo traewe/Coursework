@@ -6,14 +6,6 @@ using System.Threading.Tasks;
 
 namespace Coursework
 {
-    interface ILectureBuilder
-    {
-        void Reset();
-        void SetName(string name);
-        void SetText(string text);
-        void SetURL(string url);
-        void SetFilePath(string filePath);
-    }
     public class LectureBuilder : ILectureBuilder
     {
         Lecture lecture;

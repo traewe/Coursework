@@ -3,36 +3,34 @@ using System.Collections.Generic;
 
 namespace Coursework
 {
-    public interface ICompositeElement
-    {
-        void ShowInternalStructure();
-    }
-    interface ICloneableLecture
-    {
-        Lecture Clone();
-    }
     public class SubjectsCollection : ICompositeElement
     {
-        protected List<Subject> subjects = new List<Subject>();
+        List<Subject> subjects = new List<Subject>();
 
-        public void Add(ICompositeElement component)
+        public void Add(Subject subject)
         {
-            if (component is Subject)
-                subjects.Add((Subject)component);
+            subjects.Add(subject);
         }
 
-        public void Remove(ICompositeElement component)
+        public void Remove(Subject subject)
         {
-            if (component is Subject)
-                subjects.Remove((Subject)component);
+            subjects.Remove(subject);
         }
 
-        public void ShowInternalStructure()
+        public void ShowWholeInternalStructure()
         {
             for (int i = 0; i < subjects.Count; i++)
             {
                 Console.Write($"{i + 1} ");
-                subjects[i].ShowInternalStructure();
+                subjects[i].ShowWholeInternalStructure();
+            }
+        }
+
+        public void ShowOnlyChildren()
+        {
+            for (int i = 0; i < subjects.Count; i++)
+            {
+                Console.Write($"{i + 1} {subjects[i].Name}");
             }
         }
     }
@@ -40,75 +38,87 @@ namespace Coursework
     public class Subject : ICompositeElement
     {
         private string name;
+
+        protected List<Chapter> chapters = new List<Chapter>();
+
         public string Name
         {
             get { return name; }
         }
-
-        protected List<Chapter> chapters = new List<Chapter>();
 
         public Subject(string name)
         {
             this.name = name;
         }
 
-        public void Add(ICompositeElement component)
+        public void Add(Chapter chapter)
         {
-            if (component is Chapter)
-                chapters.Add((Chapter)component);
+            chapters.Add(chapter);
         }
 
-        public void Remove(ICompositeElement component)
+        public void Remove(Chapter chapter)
         {
-            if (component is Chapter)
-                chapters.Remove((Chapter)component);
+            chapters.Remove(chapter);
         }
 
-        public void ShowInternalStructure()
+        public void ShowWholeInternalStructure()
         {
             Console.WriteLine(name);
             for (int i = 0; i < chapters.Count; i++)
             {
                 Console.Write($" {i + 1} ");
-                chapters[i].ShowInternalStructure();
+                chapters[i].ShowWholeInternalStructure();
+            }
+        }
+
+        public void ShowOnlyChildren()
+        {
+            for (int i = 0; i < chapters.Count; i++)
+            {
+                Console.Write($"{i + 1} {chapters[i].Name}");
             }
         }
     }
 
     public class Chapter : ICompositeElement
     {
-        private string name;
+        string name;
+        protected List<Lecture> lectures = new List<Lecture>();
+
         public string Name
         {
             get { return name; }
         }
-
-        protected List<Lecture> lectures = new List<Lecture>();
 
         public Chapter(string name)
         {
             this.name = name;
         }
 
-        public void Add(ICompositeElement component)
+        public void Add(Lecture lecture)
         {
-            if (component is Lecture)
-                lectures.Add((Lecture)component);
+            lectures.Add(lecture);
         }
 
-        public void Remove(ICompositeElement component)
+        public void Remove(Lecture lecture)
         {
-            if (component is Lecture)
-                lectures.Remove((Lecture)component);
+            lectures.Remove(lecture);
         }
 
-        public void ShowInternalStructure()
+        public void ShowWholeInternalStructure()
         {
             Console.WriteLine(name);
             for (int i = 0; i < lectures.Count; i++)
             {
                 Console.Write($"  {i + 1} ");
-                lectures[i].ShowInternalStructure();
+                lectures[i].ShowWholeInternalStructure();
+            }
+        }
+        public void ShowOnlyChildren()
+        {
+            for (int i = 0; i < lectures.Count; i++)
+            {
+                Console.Write($"{i + 1} {lectures[i].Name}");
             }
         }
     }
@@ -125,10 +135,13 @@ namespace Coursework
             Name = name;
         }
 
-        public void ShowInternalStructure()
+        public void ShowWholeInternalStructure()
         {
             Console.WriteLine(Name);
         }
+        
+        public void ShowOnlyChildren() { }
+
         public Lecture Clone()
         {
             return (Lecture)MemberwiseClone();

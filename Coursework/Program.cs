@@ -1,38 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Coursework
 {
-    class Program
+    public static class Program
     {
+        public static string enteredPassword = "defaultPassword";
         static void Main(string[] args)
         {
-            /*// Creating lectures
-            Lecture lecture1 = new Lecture("Introduction to Programming");
-            Lecture lecture2 = new Lecture("Data Structures and Algorithms");
-            Lecture lecture3 = new Lecture("Object-Oriented Programming");
+            Console.OutputEncoding = Encoding.UTF8;
+            
+            IUserInterface userInterface = new AdminCheckingUserInterface();
 
-            // Creating chapters
-            Chapter chapter1 = new Chapter("Programming Fundamentals");
-            chapter1.Add(lecture1);
-            chapter1.Add(lecture2);
+            while (true)
+            {
+                userInterface.WriteOptionsFirstStage();
+                int answer = Convert.ToInt32(Console.ReadLine());
 
-            Chapter chapter2 = new Chapter("Advanced Programming");
-            chapter2.Add(lecture3);
+                switch (answer)
+                {
+                    case 1:
+                        break;
+                    case 4:
 
-            // Creating subjects
-            Subject subject1 = new Subject("Computer Science");
-            subject1.Add(chapter1);
-            subject1.Add(chapter2);
-
-            // Creating a collection of subjects
-            SubjectsCollection subjectsCollection = new SubjectsCollection();
-            subjectsCollection.Add(subject1);
-
-            // Displaying internal structure
-            subjectsCollection.ShowInternalStructure();*/
+                        break;
+                }
+            }
         }
     }
-
 }
