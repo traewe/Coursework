@@ -55,4 +55,9 @@ namespace Coursework
             return (LectureState)MemberwiseClone();
         }
     }
+    interface SavingAndLoadingStrategy
+    {
+        void SaveData();
+        void LoadData();
+    }
 }
