@@ -33,11 +33,6 @@ namespace Coursework
             subjectsCollection.GetChildByName(Program.selectedSubject.Name).Remove(chapter);
         }
 
-        public override void AddLecture(LectureState lecture)
-        {
-            subjectsCollection.GetChildByName(Program.selectedSubject.Name).GetChildByName(Program.selectedChapter.Name).Add(lecture);
-        }
-
         public override void RemoveLecture(LectureState lecture)
         {
             subjectsCollection.GetChildByName(Program.selectedSubject.Name).GetChildByName(Program.selectedChapter.Name).Remove(lecture);
@@ -61,12 +56,25 @@ namespace Coursework
         {
             Console.WriteLine("==============================");
             Console.WriteLine("1 - Переглянути всю структуру (предмети - розділи - лекції)");
-            Console.WriteLine("2 - Переглянути список всіх розділів");
+            Console.WriteLine("2 - Переглянути список всіх розділів у цьому предметі");
             Console.WriteLine("3 - Перейти у певний розділ");
             Console.WriteLine("4 - Додати розділ");
             Console.WriteLine("5 - Видалити розділ");
             Console.WriteLine("6 - Змінити назву вже наявного розділу");
             Console.WriteLine("7 - Вийти у попереднє меню");
+            Console.WriteLine("==============================");
+        }
+        public override void WriteOptionsThirdStage()
+        {
+            Console.WriteLine("==============================");
+            Console.WriteLine("1 - Переглянути всю структуру (предмети - розділи - лекції)");
+            Console.WriteLine("2 - Переглянути список всіх лекцій у цьому розділі");
+            Console.WriteLine("3 - Перейти у певну лекцію");
+            Console.WriteLine("4 - Додати лекцію");
+            Console.WriteLine("5 - Видалити лекцію");
+            Console.WriteLine("6 - Змінити назву вже наявної лекції");
+            Console.WriteLine("7 - Скопіювати лекцію в інший розділ");
+            Console.WriteLine("8 - Вийти у попереднє меню");
             Console.WriteLine("==============================");
         }
     }
@@ -116,6 +124,11 @@ namespace Coursework
             userInterface.WriteOptionsSecondStage();
         }
 
+        public override void WriteOptionsThirdStage()
+        {
+            userInterface.WriteOptionsThirdStage();
+        }
+
         public override void AddChapter(Chapter chapter)
         {
             if (CheckAccess())
@@ -133,18 +146,6 @@ namespace Coursework
             if (CheckAccess())
             {
                 subjectsCollection.GetChildByName(Program.selectedSubject.Name).Remove(chapter);
-            }
-            else
-            {
-                Console.WriteLine("У доступі відмовлено, увійдіть як адмін");
-            }
-        }
-
-        public override void AddLecture(LectureState lecture)
-        {
-            if (CheckAccess())
-            {
-                subjectsCollection.GetChildByName(Program.selectedSubject.Name).GetChildByName(Program.selectedChapter.Name).Add(lecture);
             }
             else
             {

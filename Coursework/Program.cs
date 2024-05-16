@@ -20,6 +20,7 @@ namespace Coursework
         public static Chapter selectedChapter;
         public static LectureState selectedLecture;
         public static ISavingAndLoadingStrategy savingAndLoadingStrategy;
+        public static LectureStateBuilder lectureStateBuilder = new LectureStateBuilder();
         public static void SetStrategy(ISavingAndLoadingStrategy strategy)
         {
             savingAndLoadingStrategy = strategy;
@@ -325,6 +326,141 @@ namespace Coursework
                             break;
                         case 7:
                             selectedSubject = null;
+                            break;
+                    }
+                }
+
+                while (selectedSubject != null && selectedChapter != null && selectedLecture == null)
+                {
+                    userInterface.WriteOptionsThirdStage();
+
+                    while (true)
+                    {
+                        input = Console.ReadLine();
+
+                        if (int.TryParse(input, out answer))
+                        {
+                            if (answer >= 1 && answer <= 8)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Введена відповідь не відповідає вимогам. Спробуйте ще раз");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Введена відповідь не відповідає вимогам. Спробуйте ще раз");
+                        }
+                    }
+
+                    switch (answer)
+                    {
+                        case 1:
+                            subjectsCollection.ShowWholeInternalStructure();
+                            break;
+                        case 2:
+                            selectedChapter.ShowOnlyChildren();
+                            break;
+                        case 3:
+                            selectedChapter.ShowOnlyChildren();
+                            Console.WriteLine("Введіть назву лекції, в яку хочете перейти. Або натисніть \"Enter\"" +
+                                " з пустою відповіддю для виходу назад");
+
+                            do
+                            {
+                                input = Console.ReadLine();
+                            } while (!string.IsNullOrWhiteSpace(input) && !selectedChapter.ContainsName(input));
+
+                            if (!string.IsNullOrWhiteSpace(input))
+                            {
+                                selectedLecture = (LectureState)selectedChapter.GetChildByName(input);
+                            }
+
+                            break;
+                        case 4:
+                            Console.WriteLine("Введіть назву лекції, якої ще немає в цьому розділі");
+
+                            do
+                            {
+                                input = Console.ReadLine();
+                            }
+                            while (selectedChapter.ContainsName(input) || string.IsNullOrWhiteSpace(input) || input.Contains('+') || input.Contains(';'));
+
+                            if (enteredPassword == rightPassword)
+                            {
+                                Console.WriteLine("Напишіть текст лекції. Потім натисніть \"Enter\" та напишіть посилання " +
+                                    "на корисні ресурси через пробіл у формі повних посилань на сайти." +
+                                    "Знов натисніть \"Enter\" і введіть повні шляхи розташування файлів лекції через пробіл");
+
+                                lectureStateBuilder.ResetForUnfinishedState();
+                                lectureStateBuilder.SetName(input);
+                                lectureStateBuilder.SetText(Console.ReadLine());
+                                lectureStateBuilder.SetURLs(Console.ReadLine());
+                                lectureStateBuilder.SetFilesPaths(Console.ReadLine());
+
+                                selectedChapter.Add(lectureStateBuilder.GetLecture());
+
+                                SetStrategy(new LecturesSavingAndLoading());
+                                savingAndLoadingStrategy.SaveData();
+                            }
+                            else
+                            {
+                                Console.WriteLine("У доступі відмовлено, увійдіть як адмін");
+                            }
+
+                            break;
+                        case 5:
+                            selectedChapter.ShowOnlyChildren();
+                            Console.WriteLine("Введіть назву лекції, який хочете видалити. Або натисніть \"Enter\" з пустою відповіддю для виходу назад");
+
+                            do
+                            {
+                                input = Console.ReadLine();
+                            } while (!string.IsNullOrWhiteSpace(input) && !selectedChapter.ContainsName(input));
+
+                            if (!string.IsNullOrWhiteSpace(input))
+                            {
+                                LectureState lectureToRemove = (LectureState)selectedChapter.GetChildByName(input);
+                                userInterface.RemoveLecture(lectureToRemove);
+                            }
+
+                            SetStrategy(new LecturesSavingAndLoading());
+                            savingAndLoadingStrategy.SaveData();
+                            break;
+                        case 6:
+                            selectedSubject.ShowOnlyChildren();
+                            Console.WriteLine("Введіть назву розділу, якому хочете змінити назву. Або натисніть \"Enter\" з пустою відповіддю для виходу назад");
+
+                            do
+                            {
+                                input = Console.ReadLine();
+                            } while (!string.IsNullOrWhiteSpace(input) && !selectedSubject.ContainsName(input));
+
+                            if (!string.IsNullOrWhiteSpace(input))
+                            {
+                                Console.WriteLine("Введіть нову назву розділу");
+
+                                string newChapterName;
+                                do
+                                {
+                                    newChapterName = Console.ReadLine();
+                                }
+                                while (selectedSubject.ContainsName(newChapterName) || string.IsNullOrWhiteSpace(newChapterName) || newChapterName.Contains("+") || newChapterName.Contains(";"));
+
+                                Chapter chapterToChange = (Chapter)selectedSubject.GetChildByName(input);
+
+                                chapterToChange.Name = newChapterName;
+                            }
+
+                            SetStrategy(new LecturesSavingAndLoading());
+                            savingAndLoadingStrategy.SaveData();
+                            break;
+                        case 7:
+                            break;
+                        case 8:
+                            selectedChapter = null;
                             break;
                     }
                 }

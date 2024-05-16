@@ -349,7 +349,7 @@ namespace Coursework
                     filesPaths += filesPath + " ";
                 }
 
-                result += $"{lectures[i].Name},{lectures[i].Text},{URLs},{filesPaths},{subject.IndexOf(this)},{Program.subjectsCollection.IndexOf(subject)};";
+                result += $"{lectures[i].Name}\\{lectures[i].Text}\\{URLs}\\{filesPaths}\\{subject.IndexOf(this)}\\{Program.subjectsCollection.IndexOf(subject)};";
             }
 
             return string.Empty;

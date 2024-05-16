@@ -15,7 +15,7 @@ namespace Coursework
         }
         public void ResetForFinishedState()
         {
-            lecture = new UnfinishedLectureState();
+            lecture = new FinishedLectureState();
         }
         public void ResetForAdminState()
         {
@@ -30,7 +30,7 @@ namespace Coursework
             lecture.Text = text;
         }
 
-        public void SetURL(string url)
+        public void SetURLs(string url)
         {
             lecture.URLs = url.Split(" ");
         }

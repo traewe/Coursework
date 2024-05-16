@@ -32,7 +32,7 @@ namespace Coursework
         void ResetForAdminState();
         void SetName(string name);
         void SetText(string text);
-        void SetURL(string url);
+        void SetURLs(string url);
         void SetFilesPaths(string filePath);
         LectureState GetLecture();
     }
@@ -43,11 +43,10 @@ namespace Coursework
         public abstract void RemoveSubject(Subject subject);
         public abstract void AddChapter(Chapter chapter);
         public abstract void RemoveChapter(Chapter chapter);
-        public abstract void AddLecture(LectureState lecture);
         public abstract void RemoveLecture(LectureState lecture);
         public abstract void WriteOptionsFirstStage();
-
         public abstract void WriteOptionsSecondStage();
+        public abstract void WriteOptionsThirdStage();
     }
     public abstract class LectureState : ICloneableLecture, ICompositeElement
     {
