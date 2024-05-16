@@ -75,9 +75,13 @@ namespace Coursework
             string result = "";
             Sort();
 
-            foreach (Subject subject in subjects)
+            for (int i = 0; i < subjects.Count; i++)
             {
-                result += subject.Name + ";";
+                result += subjects[i].Name;
+                if (i != subjects.Count - 1)
+                {
+                    result += ";";
+                }
             }
 
             return result;

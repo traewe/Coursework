@@ -11,7 +11,7 @@ namespace Coursework
 {
     public static class Program
     {
-        public static string enteredPassword = "Aboba6";
+        public static string enteredPassword;
         public static string rightPassword;
         public static UserInterfaceAbstraction userInterface;
         public static SubjectsCollection subjectsCollection;
@@ -29,7 +29,6 @@ namespace Coursework
             Console.OutputEncoding = Encoding.UTF8;
             Console.InputEncoding = Encoding.Unicode;
 
-            Console.WriteLine(File.ReadAllLines("LectureBase.txt").Length);
             int answer;
             string input;
             bool isProgramStopped = false;
@@ -37,10 +36,11 @@ namespace Coursework
             userInterface = new AdminCheckingUserInterface(subjectsCollection);
             passwordChecker = new PasswordLengthChecker();
 
-            SetStrategy(new PasswordSavingAndLoading());
-            
             if (File.Exists("LectureBase.txt"))
             {
+                SetStrategy(new PasswordSavingAndLoading());
+                savingAndLoadingStrategy.LoadData();
+                SetStrategy(new SubjectsSavingAndLoading());
                 savingAndLoadingStrategy.LoadData();
             }
 
@@ -105,6 +105,9 @@ namespace Coursework
                             while (userInterface.subjectsCollection.ContainsName(input) || string.IsNullOrWhiteSpace(input));
 
                             userInterface.AddSubject(new Subject(input));
+
+                            SetStrategy(new SubjectsSavingAndLoading());
+                            savingAndLoadingStrategy.SaveData();
                             break;
                         case 5:
                             userInterface.subjectsCollection.ShowOnlyChildren();
@@ -121,6 +124,8 @@ namespace Coursework
                                 userInterface.RemoveSubject(subjectToRemove);
                             }
 
+                            SetStrategy(new SubjectsSavingAndLoading());
+                            savingAndLoadingStrategy.SaveData();
                             break;
                         case 6:
                             subjectsCollection.ShowOnlyChildren();
@@ -146,6 +151,9 @@ namespace Coursework
                                 
                                 subjectToChange.Name = newSubjectName;
                             }
+
+                            SetStrategy(new SubjectsSavingAndLoading());
+                            savingAndLoadingStrategy.SaveData();
                             break;
                         case 7:
                             if (string.IsNullOrEmpty(rightPassword))
@@ -193,6 +201,7 @@ namespace Coursework
                                 subjectsCollection.Clear();
                                 enteredPassword = string.Empty;
                                 rightPassword = string.Empty;
+                                File.Delete("LectureBase.txt");
                             }
 
                             break;

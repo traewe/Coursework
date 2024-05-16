@@ -11,61 +11,47 @@ namespace Coursework
     {
         public void SaveData()
         {
-            try
+            if (File.Exists("LectureBase.txt"))
             {
-                if (File.Exists("LectureBase.txt"))
-                {
-                    string[] lines = File.ReadAllLines("LectureBase.txt");
-                    lines[0] = Program.rightPassword;
-                    File.WriteAllLines("LectureBase.txt", lines);
-                }
-                else
-                {
-                    File.AppendAllText("LectureBase.txt", Program.rightPassword);
-                }
+                string[] lines = File.ReadAllLines("LectureBase.txt");
+                lines[0] = Program.rightPassword;
+                File.WriteAllLines("LectureBase.txt", lines);
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Помилка при додаванні даних: {ex.Message}");
+                File.AppendAllText("LectureBase.txt", Program.rightPassword);
             }
         }
         public void LoadData()
         {
-            try
-            {
-                Program.rightPassword = File.ReadAllLines("LectureBase.txt")[0];
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Помилка при читанні даних: {ex.Message}");
-            }
+            Program.rightPassword = File.ReadAllLines("LectureBase.txt")[0];
         }
     }
     public class SubjectsSavingAndLoading : ISavingAndLoadingStrategy
     {
         public void SaveData()
         {
-            try 
-            { 
-                File.AppendText(Program.subjectsCollection.GetStringForSaving());
-            }
-            catch (Exception ex)
+            string[] lines = File.ReadAllLines("LectureBase.txt");
+
+            if (lines.Length > 1)
             {
-                Console.WriteLine($"Помилка при додаванні даних: {ex.Message}");
+                lines[1] = Program.subjectsCollection.GetStringForSaving();
+                File.WriteAllLines("LectureBase.txt", lines);
+            }
+            else
+            {
+                StreamWriter sw = File.AppendText("LectureBase.txt");
+                sw.WriteLine("\n" + Program.subjectsCollection.GetStringForSaving());
+                sw.Close();
             }
         }
         public void LoadData()
         {
-            try
+            foreach (string str in File.ReadAllLines("LectureBase.txt")[1].Split(";"))
             {
-                foreach (string str in File.ReadAllLines("LectureBase.txt")[1].Split(";"))
-                {
-                    Program.userInterface.AddSubject(new Subject(str));
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Помилка при читанні даних: {ex.Message}");
+                Program.enteredPassword = Program.rightPassword;
+                Program.userInterface.AddSubject(new Subject(str));
+                Program.enteredPassword = string.Empty;
             }
         }
     }
