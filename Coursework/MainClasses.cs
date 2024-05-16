@@ -8,29 +8,6 @@ namespace Coursework
     {
         List<Subject> subjects = new List<Subject>();
 
-        public Subject GetSubjectByName(string name)
-        {
-            for (int i = 0; i < subjects.Count(); i++)
-            {
-                if (subjects[i].Name == name)
-                {
-                    return subjects[i];
-                }
-            }
-
-            return null;
-        }
-
-        public void Add(Subject subject)
-        {
-            subjects.Add(subject);
-        }
-
-        public void Remove(Subject subject)
-        {
-            subjects.Remove(subject);
-        }
-
         public void ShowWholeInternalStructure()
         {
             for (int i = 0; i < subjects.Count; i++)
@@ -48,9 +25,43 @@ namespace Coursework
             }
         }
 
+        public ICompositeElement GetChildByName(string name)
+        {
+            for (int i = 0; i < subjects.Count(); i++)
+            {
+                if (subjects[i].Name == name)
+                {
+                    return subjects[i];
+                }
+            }
+
+            return null;
+        }
+
+        public void Add(ICompositeElement subject)
+        {
+            if (subject is Subject)
+            {
+                subjects.Add((Subject)subject);
+            }
+        }
+
+        public void Remove(ICompositeElement subject)
+        {
+            if (subject is Subject)
+            {
+                subjects.Remove((Subject)subject);
+            }
+        }
+
         public int Count()
         {
             return subjects.Count;
+        }
+
+        public void Clear()
+        {
+            subjects.Clear();
         }
 
         public bool ContainsName(string name)
@@ -78,16 +89,6 @@ namespace Coursework
             Name = name;
         }
 
-        public void Add(Chapter chapter)
-        {
-            chapters.Add(chapter);
-        }
-
-        public void Remove(Chapter chapter)
-        {
-            chapters.Remove(chapter);
-        }
-
         public void ShowWholeInternalStructure()
         {
             Console.WriteLine(Name);
@@ -104,6 +105,58 @@ namespace Coursework
             {
                 Console.WriteLine($"{i + 1} {chapters[i].Name}");
             }
+        }
+
+        public ICompositeElement GetChildByName(string name)
+        {
+            for (int i = 0; i < chapters.Count(); i++)
+            {
+                if (chapters[i].Name == name)
+                {
+                    return chapters[i];
+                }
+            }
+
+            return null;
+        }
+
+        public void Add(ICompositeElement chapter)
+        {
+            if (chapter is Chapter)
+            {
+                chapters.Add((Chapter)chapter);
+            }
+        }
+
+        public void Remove(ICompositeElement chapter)
+        {
+            if (chapter is Chapter)
+            {
+                chapters.Remove((Chapter)chapter);
+            }
+        }
+
+        public int Count()
+        {
+            return chapters.Count;
+        }
+
+        public void Clear()
+        {
+            chapters.Clear();
+        }
+
+        public bool ContainsName(string name)
+        {
+            foreach (Chapter chapter in chapters)
+            {
+                if (chapter.Name == name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
@@ -122,16 +175,6 @@ namespace Coursework
             this.name = name;
         }
 
-        public void Add(LectureState lecture)
-        {
-            lectures.Add(lecture);
-        }
-
-        public void Remove(LectureState lecture)
-        {
-            lectures.Remove(lecture);
-        }
-
         public void ShowWholeInternalStructure()
         {
             Console.WriteLine(name);
@@ -147,6 +190,58 @@ namespace Coursework
             {
                 Console.WriteLine($"{i + 1} {lectures[i].Name}");
             }
+        }
+
+        public ICompositeElement GetChildByName(string name)
+        {
+            for (int i = 0; i < lectures.Count(); i++)
+            {
+                if (lectures[i].Name == name)
+                {
+                    return lectures[i];
+                }
+            }
+
+            return null;
+        }
+
+        public void Add(ICompositeElement lecture)
+        {
+            if (lecture is LectureState)
+            {
+                lectures.Add((LectureState)lecture);
+            }
+        }
+
+        public void Remove(ICompositeElement lecture)
+        {
+            if (lecture is LectureState)
+            {
+                lectures.Remove((LectureState)lecture);
+            }
+        }
+
+        public int Count()
+        {
+            return lectures.Count;
+        }
+
+        public void Clear()
+        {
+            lectures.Clear();
+        }
+
+        public bool ContainsName(string name)
+        {
+            foreach (LectureState lecture in lectures)
+            {
+                if (lecture.Name == name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
     public class UnfinishedLectureState : LectureState

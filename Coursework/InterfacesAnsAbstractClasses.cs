@@ -6,10 +6,16 @@ using System.Threading.Tasks;
 
 namespace Coursework
 {
-    interface ICompositeElement
+    public interface ICompositeElement
     {
         void ShowWholeInternalStructure();
         void ShowOnlyChildren();
+        int Count();
+        bool ContainsName(string name);
+        void Clear();
+        void Add(ICompositeElement component);
+        void Remove(ICompositeElement component);
+        ICompositeElement GetChildByName(string name);
     }
     interface ICloneableLecture
     {
@@ -32,6 +38,8 @@ namespace Coursework
         public abstract void AddSubject(Subject subject);
         public abstract void RemoveSubject(Subject subject);
         public abstract void WriteOptionsFirstStage();
+
+        public abstract void WriteOptionsSecondStage();
     }
     public abstract class LectureState : ICloneableLecture, ICompositeElement
     {
@@ -51,7 +59,12 @@ namespace Coursework
         }
 
         public void ShowOnlyChildren() { }
-
+        public int Count() {  return 0; }
+        public bool ContainsName(string name) { return false; }
+        public void Clear() { }
+        public void Add(ICompositeElement component) { }
+        public void Remove(ICompositeElement component) { }
+        public ICompositeElement GetChildByName(string name) { return this; }
         public LectureState Clone()
         {
             return (LectureState)MemberwiseClone();
@@ -62,7 +75,7 @@ namespace Coursework
         void SaveData();
         void LoadData();
     }
-    interface IPasswordChecker
+    public interface IPasswordChecker
     {
         bool CheckPassword(string password);
     }

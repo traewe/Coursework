@@ -33,7 +33,20 @@ namespace Coursework
             Console.WriteLine("5 - Видалити предмет");
             Console.WriteLine("6 - Змінити назву вже наявного предмету");
             Console.WriteLine("7 - Увійти як адмін (або встановити пароль, якщо його ще немає)");
-            Console.WriteLine("8 - Вийти");
+            Console.WriteLine("8 - Очистити всі дані");
+            Console.WriteLine("9 - Вийти");
+            Console.WriteLine("==============================");
+        }
+        public override void WriteOptionsSecondStage()
+        {
+            Console.WriteLine("==============================");
+            Console.WriteLine("1 - Переглянути всю структуру (предмети - розділи - лекції)");
+            Console.WriteLine("2 - Переглянути список всіх розділів");
+            Console.WriteLine("3 - Перейти у певний розділ");
+            Console.WriteLine("4 - Додати розділ");
+            Console.WriteLine("5 - Видалити розділ");
+            Console.WriteLine("6 - Змінити назву вже наявного розділу");
+            Console.WriteLine("7 - Вийти у попереднє меню");
             Console.WriteLine("==============================");
         }
     }
@@ -47,14 +60,6 @@ namespace Coursework
         {
             this.subjectsCollection = subjectsCollection;
             userInterface = new UserInterface(subjectsCollection);
-        }
-
-        public void SetPassword(string password)
-        {
-            if (this.password == null)
-            {
-                this.password = password;
-            }
         }
 
         public override void AddSubject(Subject subject)
@@ -86,9 +91,14 @@ namespace Coursework
             userInterface.WriteOptionsFirstStage();
         }
 
+        public override void WriteOptionsSecondStage()
+        {
+            userInterface.WriteOptionsSecondStage();
+        }
+
         public bool CheckAccess()
         {
-            return password == Program.enteredPassword;
+            return Program.rightPassword == Program.enteredPassword;
         }
     }
 }
