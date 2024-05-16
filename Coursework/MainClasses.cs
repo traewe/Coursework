@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
 namespace Coursework
 {
@@ -8,6 +9,25 @@ namespace Coursework
     {
         List<Subject> subjects = new List<Subject>();
 
+        public Subject this[int index]
+        {
+            get
+            {
+                if (index >= 0 || index < subjects.Count)
+                {
+                    return subjects[index];
+                }
+
+                return null;
+            }
+            set
+            {
+                if (index >= 0 || index < subjects.Count)
+                {
+                    subjects[index] = value;
+                }
+            }
+        }
         public void ShowWholeInternalStructure()
         {
             for (int i = 0; i < subjects.Count; i++)
@@ -191,7 +211,7 @@ namespace Coursework
 
             for (int i = 0; i < chapters.Count(); i++)
             {
-                result += $"{chapters[i].Name},{Program.subjectsCollection.IndexOf(this)};";
+                result += $"{chapters[i].Name}+{Program.subjectsCollection.IndexOf(this)};";
             }
 
             return result;

@@ -42,6 +42,8 @@ namespace Coursework
                 savingAndLoadingStrategy.LoadData();
                 SetStrategy(new SubjectsSavingAndLoading());
                 savingAndLoadingStrategy.LoadData();
+                SetStrategy(new ChaptersSavingAndLoading());
+                savingAndLoadingStrategy.LoadData();
             }
 
             while (!isProgramStopped)
@@ -102,7 +104,7 @@ namespace Coursework
                             {
                                 input = Console.ReadLine();
                             }
-                            while (userInterface.subjectsCollection.ContainsName(input) || string.IsNullOrWhiteSpace(input));
+                            while (userInterface.subjectsCollection.ContainsName(input) || string.IsNullOrWhiteSpace(input) || input.Contains('+') || input.Contains(';'));
 
                             userInterface.AddSubject(new Subject(input));
 
@@ -129,7 +131,8 @@ namespace Coursework
                             break;
                         case 6:
                             subjectsCollection.ShowOnlyChildren();
-                            Console.WriteLine("Введіть назву предмету, якому хочете змінити назву. Або натисніть \"Enter\" з пустою відповіддю для виходу назад");
+                            Console.WriteLine("Введіть назву предмету, якому хочете змінити назву. Або натисніть \"Enter\" з пустою " +
+                                "відповіддю для виходу назад");
 
                             do
                             {
@@ -145,7 +148,7 @@ namespace Coursework
                                 {
                                     newSubjectName = Console.ReadLine();
                                 }
-                                while (string.IsNullOrWhiteSpace(newSubjectName));
+                                while (userInterface.subjectsCollection.ContainsName(newSubjectName) || string.IsNullOrWhiteSpace(newSubjectName) || newSubjectName.Contains('+') || newSubjectName.Contains(';'));
 
                                 Subject subjectToChange = (Subject)subjectsCollection.GetChildByName(input);
                                 
@@ -267,9 +270,12 @@ namespace Coursework
                             {
                                 input = Console.ReadLine();
                             }
-                            while (selectedSubject.ContainsName(input) || string.IsNullOrWhiteSpace(input));
+                            while (selectedSubject.ContainsName(input) || string.IsNullOrWhiteSpace(input) || input.Contains('+') || input.Contains(';'));
 
                             userInterface.AddChapter(new Chapter(input));
+
+                            SetStrategy(new ChaptersSavingAndLoading());
+                            savingAndLoadingStrategy.SaveData();
                             break;
                         case 5:
                             selectedSubject.ShowOnlyChildren();
@@ -286,6 +292,8 @@ namespace Coursework
                                 userInterface.RemoveChapter(chapterToRemove);
                             }
 
+                            SetStrategy(new ChaptersSavingAndLoading());
+                            savingAndLoadingStrategy.SaveData();
                             break;
                         case 6:
                             selectedSubject.ShowOnlyChildren();
@@ -305,12 +313,15 @@ namespace Coursework
                                 {
                                     newChapterName = Console.ReadLine();
                                 }
-                                while (string.IsNullOrWhiteSpace(newChapterName));
+                                while (selectedSubject.ContainsName(newChapterName) || string.IsNullOrWhiteSpace(newChapterName) || newChapterName.Contains("+") || newChapterName.Contains(";"));
 
                                 Chapter chapterToChange = (Chapter)selectedSubject.GetChildByName(input);
 
                                 chapterToChange.Name = newChapterName;
                             }
+
+                            SetStrategy(new ChaptersSavingAndLoading());
+                            savingAndLoadingStrategy.SaveData();
                             break;
                         case 7:
                             selectedSubject = null;
