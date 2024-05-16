@@ -1,12 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using System.Text;
 namespace Coursework
 {
     public class SubjectsCollection : ICompositeElement
     {
         List<Subject> subjects = new List<Subject>();
+
+        public Subject GetSubjectByName(string name)
+        {
+            for (int i = 0; i < subjects.Count(); i++)
+            {
+                if (subjects[i].Name == name)
+                {
+                    return subjects[i];
+                }
+            }
+
+            return null;
+        }
 
         public void Add(Subject subject)
         {
@@ -31,25 +44,38 @@ namespace Coursework
         {
             for (int i = 0; i < subjects.Count; i++)
             {
-                Console.Write($"{i + 1} {subjects[i].Name}");
+                Console.WriteLine($"{i + 1} {subjects[i].Name}");
             }
+        }
+
+        public int Count()
+        {
+            return subjects.Count;
+        }
+
+        public bool ContainsName(string name)
+        {
+            foreach (Subject subject in subjects)
+            {
+                if (subject.Name == name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
     public class Subject : ICompositeElement
     {
-        private string name;
-
         protected List<Chapter> chapters = new List<Chapter>();
 
-        public string Name
-        {
-            get { return name; }
-        }
+        public string Name { get; set; }
 
         public Subject(string name)
         {
-            this.name = name;
+            Name = name;
         }
 
         public void Add(Chapter chapter)
@@ -64,7 +90,7 @@ namespace Coursework
 
         public void ShowWholeInternalStructure()
         {
-            Console.WriteLine(name);
+            Console.WriteLine(Name);
             for (int i = 0; i < chapters.Count; i++)
             {
                 Console.Write($" {i + 1} ");
@@ -76,7 +102,7 @@ namespace Coursework
         {
             for (int i = 0; i < chapters.Count; i++)
             {
-                Console.Write($"{i + 1} {chapters[i].Name}");
+                Console.WriteLine($"{i + 1} {chapters[i].Name}");
             }
         }
     }
@@ -119,7 +145,7 @@ namespace Coursework
         {
             for (int i = 0; i < lectures.Count; i++)
             {
-                Console.Write($"{i + 1} {lectures[i].Name}");
+                Console.WriteLine($"{i + 1} {lectures[i].Name}");
             }
         }
     }
@@ -219,7 +245,7 @@ namespace Coursework
     }
     public class AdminLectureState : LectureState
     {
-        AdminCheckingUserInterface adminCheckingUserInterface = new AdminCheckingUserInterface();
+        AdminCheckingUserInterface adminCheckingUserInterface = new AdminCheckingUserInterface(Program.subjectsCollection);
         public override void ShowText()
         {
             if (!adminCheckingUserInterface.CheckAccess())

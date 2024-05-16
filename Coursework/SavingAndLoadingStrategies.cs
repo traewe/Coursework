@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Coursework
 {
-    public class PasswordSavingAndLoading : SavingAndLoadingStrategy
+    public class PasswordSavingAndLoading : ISavingAndLoadingStrategy
     {
         public void SaveData()
         {
@@ -17,7 +17,7 @@ namespace Coursework
 
         }
     }
-    public class SubjectsSavingAndLoading : SavingAndLoadingStrategy
+    public class SubjectsSavingAndLoading : ISavingAndLoadingStrategy
     {
         public void SaveData()
         {
@@ -28,7 +28,7 @@ namespace Coursework
 
         }
     }
-    public class ChaptersSavingAndLoading : SavingAndLoadingStrategy
+    public class ChaptersSavingAndLoading : ISavingAndLoadingStrategy
     {
         public void SaveData()
         {
@@ -39,7 +39,7 @@ namespace Coursework
 
         }
     }
-    public class LecturesSavingAndLoading : SavingAndLoadingStrategy
+    public class LecturesSavingAndLoading : ISavingAndLoadingStrategy
     {
         public void SaveData()
         {

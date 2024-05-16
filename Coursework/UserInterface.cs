@@ -6,38 +6,47 @@ using System.Threading.Tasks;
 
 namespace Coursework
 {
-    public class UserInterface : IUserInterface
+    public class UserInterface : UserInterfaceAbstraction
     {
-        public SubjectsCollection subjectsCollection;
+        public UserInterface(SubjectsCollection subjectsCollection)
+        {
+            this.subjectsCollection = subjectsCollection;
+        }
 
-        public void AddSubject(Subject subject)
+        public override void AddSubject(Subject subject)
         {
             subjectsCollection.Add(subject);
         }
 
-        public void WriteOptionsFirstStage()
+        public override void RemoveSubject(Subject subject)
+        {
+            subjectsCollection.Remove(subject);
+        }
+
+        public override void WriteOptionsFirstStage()
         {
             Console.WriteLine("==============================");
             Console.WriteLine("1 - Переглянути всю структуру (предмети - розділи - лекції)");
             Console.WriteLine("2 - Переглянути список всіх предметів");
             Console.WriteLine("3 - Перейти у певний предмет");
             Console.WriteLine("4 - Додати предмет");
-            Console.WriteLine("5 - Увійти як адмін (або встановити пароль, якщо його ще немає)");
-            Console.WriteLine("6 - Вийти");
+            Console.WriteLine("5 - Видалити предмет");
+            Console.WriteLine("6 - Змінити назву вже наявного предмету");
+            Console.WriteLine("7 - Увійти як адмін (або встановити пароль, якщо його ще немає)");
+            Console.WriteLine("8 - Вийти");
             Console.WriteLine("==============================");
         }
     }
 
-    public class AdminCheckingUserInterface : IUserInterface
+    public class AdminCheckingUserInterface : UserInterfaceAbstraction
     {
         UserInterface userInterface;
-        public SubjectsCollection subjectsCollection;
         string password;
 
-        public AdminCheckingUserInterface()
+        public AdminCheckingUserInterface(SubjectsCollection subjectsCollection)
         {
-            userInterface = new UserInterface();
-            subjectsCollection = new SubjectsCollection();
+            this.subjectsCollection = subjectsCollection;
+            userInterface = new UserInterface(subjectsCollection);
         }
 
         public void SetPassword(string password)
@@ -48,7 +57,7 @@ namespace Coursework
             }
         }
 
-        public void AddSubject(Subject subject)
+        public override void AddSubject(Subject subject)
         {
             if (CheckAccess())
             {
@@ -56,11 +65,23 @@ namespace Coursework
             }
             else
             {
-                Console.WriteLine("Access denied. Please login as admin.");
+                Console.WriteLine("У доступі відмовлено, увійдіть як адмін");
             }
         }
 
-        public void WriteOptionsFirstStage()
+        public override void RemoveSubject(Subject subject)
+        {
+            if (CheckAccess())
+            {
+                userInterface.RemoveSubject(subject);
+            }
+            else
+            {
+                Console.WriteLine("У доступі відмовлено, увійдіть як адмін");
+            }
+        }
+
+        public override void WriteOptionsFirstStage()
         {
             userInterface.WriteOptionsFirstStage();
         }

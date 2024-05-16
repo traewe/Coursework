@@ -26,10 +26,12 @@ namespace Coursework
         void SetFilesPaths(string filePath);
         LectureState GetLecture();
     }
-    public interface IUserInterface
+    public abstract class UserInterfaceAbstraction
     {
-        void AddSubject(Subject subject);
-        void WriteOptionsFirstStage();
+        public SubjectsCollection subjectsCollection;
+        public abstract void AddSubject(Subject subject);
+        public abstract void RemoveSubject(Subject subject);
+        public abstract void WriteOptionsFirstStage();
     }
     public abstract class LectureState : ICloneableLecture, ICompositeElement
     {
@@ -55,9 +57,13 @@ namespace Coursework
             return (LectureState)MemberwiseClone();
         }
     }
-    interface SavingAndLoadingStrategy
+    interface ISavingAndLoadingStrategy
     {
         void SaveData();
         void LoadData();
+    }
+    interface IPasswordChecker
+    {
+        bool CheckPassword(string password);
     }
 }
