@@ -23,6 +23,26 @@ namespace Coursework
             subjectsCollection.Remove(subject);
         }
 
+        public override void AddChapter(Chapter chapter)
+        {
+            subjectsCollection.GetChildByName(Program.selectedSubject.Name).Add(chapter);
+        }
+
+        public override void RemoveChapter(Chapter chapter)
+        {
+            subjectsCollection.GetChildByName(Program.selectedSubject.Name).Remove(chapter);
+        }
+
+        public override void AddLecture(LectureState lecture)
+        {
+            subjectsCollection.GetChildByName(Program.selectedSubject.Name).GetChildByName(Program.selectedChapter.Name).Add(lecture);
+        }
+
+        public override void RemoveLecture(LectureState lecture)
+        {
+            subjectsCollection.GetChildByName(Program.selectedSubject.Name).GetChildByName(Program.selectedChapter.Name).Remove(lecture);
+        }
+
         public override void WriteOptionsFirstStage()
         {
             Console.WriteLine("==============================");
@@ -96,6 +116,25 @@ namespace Coursework
             userInterface.WriteOptionsSecondStage();
         }
 
+        public override void AddChapter(Chapter chapter)
+        {
+            subjectsCollection.GetChildByName(Program.selectedSubject.Name).Add(chapter);
+        }
+
+        public override void RemoveChapter(Chapter chapter)
+        {
+            subjectsCollection.GetChildByName(Program.selectedSubject.Name).Remove(chapter);
+        }
+
+        public override void AddLecture(LectureState lecture)
+        {
+            subjectsCollection.GetChildByName(Program.selectedSubject.Name).GetChildByName(Program.selectedChapter.Name).Add(lecture);
+        }
+
+        public override void RemoveLecture(LectureState lecture)
+        {
+            subjectsCollection.GetChildByName(Program.selectedSubject.Name).GetChildByName(Program.selectedChapter.Name).Remove(lecture);
+        }
         public bool CheckAccess()
         {
             return Program.rightPassword == Program.enteredPassword;

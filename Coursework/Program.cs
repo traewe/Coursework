@@ -118,7 +118,7 @@ namespace Coursework
 
                             if (!string.IsNullOrWhiteSpace(input))
                             {
-                                Console.WriteLine("Введіть нову назву предмету:");
+                                Console.WriteLine("Введіть нову назву предмету");
 
                                 string newSubjectName;
                                 do
@@ -128,14 +128,8 @@ namespace Coursework
                                 while (string.IsNullOrWhiteSpace(newSubjectName));
 
                                 Subject subjectToChange = (Subject)subjectsCollection.GetChildByName(input);
-                                if (subjectToChange != null)
-                                {
-                                    subjectToChange.Name = newSubjectName;
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Предмет не знайдено.");
-                                }
+                                
+                                subjectToChange.Name = newSubjectName;
                             }
                             break;
                         case 7:
@@ -190,7 +184,7 @@ namespace Coursework
                     }
                 }
 
-                while (selectedSubject != null)
+                while (selectedSubject != null && selectedChapter == null)
                 {
                     userInterface.WriteOptionsSecondStage();
 
@@ -221,10 +215,10 @@ namespace Coursework
                             subjectsCollection.ShowWholeInternalStructure();
                             break;
                         case 2:
-                            subjectsCollection.ShowOnlyChildren();
+                            selectedSubject.ShowOnlyChildren();
                             break;
                         case 3:
-                            subjectsCollection.ShowOnlyChildren();
+                            selectedSubject.ShowOnlyChildren();
                             Console.WriteLine("Введіть назву розділу, в який хочете перейти. Або натисніть \"Enter\"" +
                                 " з пустою відповіддю для виходу назад");
 
@@ -240,7 +234,7 @@ namespace Coursework
 
                             break;
                         case 4:
-                            Console.WriteLine("Введіть назву розділу, якої ще немає в цьому предметі");
+                            Console.WriteLine("Введіть назву розділу, якого ще немає в цьому предметі");
 
                             do
                             {
@@ -248,25 +242,54 @@ namespace Coursework
                             }
                             while (selectedSubject.ContainsName(input) || string.IsNullOrWhiteSpace(input));
 
-                            userInterface.AddSubject(new Subject(input));
+                            userInterface.AddChapter(new Chapter(input));
                             break;
                         case 5:
-                            subjectsCollection.ShowOnlyChildren();
-                            Console.WriteLine("Введіть назву предмету, який хочете видалити. Або натисніть \"Enter\" з пустою відповіддю для виходу назад");
+                            selectedSubject.ShowOnlyChildren();
+                            Console.WriteLine("Введіть назву розділу, який хочете видалити. Або натисніть \"Enter\" з пустою відповіддю для виходу назад");
 
                             do
                             {
                                 input = Console.ReadLine();
-                            } while (!string.IsNullOrWhiteSpace(input) && !subjectsCollection.ContainsName(input));
+                            } while (!string.IsNullOrWhiteSpace(input) && !selectedSubject.ContainsName(input));
 
                             if (!string.IsNullOrWhiteSpace(input))
                             {
-                                Subject subjectToRemove = subjectsCollection.GetSubjectByName(input);
-                                userInterface.RemoveSubject(subjectToRemove);
+                                Chapter chapterToRemove = (Chapter)selectedSubject.GetChildByName(input);
+                                userInterface.RemoveChapter(chapterToRemove);
                             }
 
                             break;
+                        case 6:
+                            selectedSubject.ShowOnlyChildren();
+                            Console.WriteLine("Введіть назву розділу, якому хочете змінити назву. Або натисніть \"Enter\" з пустою відповіддю для виходу назад");
+
+                            do
+                            {
+                                input = Console.ReadLine();
+                            } while (!string.IsNullOrWhiteSpace(input) && !selectedSubject.ContainsName(input));
+
+                            if (!string.IsNullOrWhiteSpace(input))
+                            {
+                                Console.WriteLine("Введіть нову назву розділу");
+
+                                string newChapterName;
+                                do
+                                {
+                                    newChapterName = Console.ReadLine();
+                                }
+                                while (string.IsNullOrWhiteSpace(newChapterName));
+
+                                Chapter chapterToChange = (Chapter)selectedSubject.GetChildByName(input);
+
+                                chapterToChange.Name = newChapterName;
+                            }
+                            break;
+                        case 7:
+                            selectedSubject = null;
+                            break;
                     }
+                }
             }
         }
     }

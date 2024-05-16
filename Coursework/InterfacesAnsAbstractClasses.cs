@@ -37,6 +37,10 @@ namespace Coursework
         public SubjectsCollection subjectsCollection;
         public abstract void AddSubject(Subject subject);
         public abstract void RemoveSubject(Subject subject);
+        public abstract void AddChapter(Chapter chapter);
+        public abstract void RemoveChapter(Chapter chapter);
+        public abstract void AddLecture(LectureState lecture);
+        public abstract void RemoveLecture(LectureState lecture);
         public abstract void WriteOptionsFirstStage();
 
         public abstract void WriteOptionsSecondStage();
