@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Channels;
@@ -10,7 +11,7 @@ namespace Coursework
 {
     public static class Program
     {
-        public static string enteredPassword;
+        public static string enteredPassword = "Aboba6";
         public static string rightPassword;
         public static UserInterfaceAbstraction userInterface;
         public static SubjectsCollection subjectsCollection;
@@ -18,10 +19,17 @@ namespace Coursework
         public static Subject selectedSubject;
         public static Chapter selectedChapter;
         public static LectureState selectedLecture;
+        public static ISavingAndLoadingStrategy savingAndLoadingStrategy;
+        public static void SetStrategy(ISavingAndLoadingStrategy strategy)
+        {
+            savingAndLoadingStrategy = strategy;
+        }
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
+            Console.InputEncoding = Encoding.Unicode;
 
+            Console.WriteLine(File.ReadAllLines("LectureBase.txt").Length);
             int answer;
             string input;
             bool isProgramStopped = false;
@@ -29,9 +37,16 @@ namespace Coursework
             userInterface = new AdminCheckingUserInterface(subjectsCollection);
             passwordChecker = new PasswordLengthChecker();
 
+            SetStrategy(new PasswordSavingAndLoading());
+            
+            if (File.Exists("LectureBase.txt"))
+            {
+                savingAndLoadingStrategy.LoadData();
+            }
+
             while (!isProgramStopped)
             {
-                while (selectedSubject == null)
+                while (selectedSubject == null && !isProgramStopped)
                 {
                     userInterface.WriteOptionsFirstStage();
 
@@ -137,7 +152,7 @@ namespace Coursework
                             {
                                 Console.WriteLine("Щоб мати можливість створювати, видаляти та змінювати об'єкти в цій базі, " +
                                 "потрібно створити пароль при першому запуску. Його довжина має бути не менше 7 символів, " +
-                                "має бути як мінімум одна маленька і одна велика літера, як мінімум один символ з цих: _.,%. Для виходу натисніть \"Enter\"");
+                                "має бути як мінімум одна маленька, одна велика літера і як мінімум одна цифра. Для виходу натисніть \"Enter\"");
                                 do
                                 {
                                     input = Console.ReadLine();
@@ -147,17 +162,20 @@ namespace Coursework
                                 {
                                     rightPassword = input;
                                     enteredPassword = input;
+
+                                    SetStrategy(new PasswordSavingAndLoading());
+                                    savingAndLoadingStrategy.SaveData();
                                 }
                             }
                             else if (string.IsNullOrEmpty(enteredPassword))
                             {
-                                Console.WriteLine("Будь ласка, введіть пароль, або натисніть \"Enter\" з пустою строкою. Для " +
+                                Console.WriteLine("Будь ласка, введіть пароль, або натисніть \"Enter\" з пустою строкою для повернення назад. Для " +
                                     "скидання паролю видаліть всі дані");
 
                                 do
                                 {
-                                    input = Console.ReadLine();
-                                } while (!string.IsNullOrWhiteSpace(input) && !(rightPassword == enteredPassword));
+                                    enteredPassword = Console.ReadLine();
+                                } while (!string.IsNullOrWhiteSpace(enteredPassword) && !(rightPassword == enteredPassword));
                             }
                             else
                             {

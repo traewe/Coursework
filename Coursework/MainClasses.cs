@@ -43,6 +43,7 @@ namespace Coursework
             if (subject is Subject)
             {
                 subjects.Add((Subject)subject);
+                Sort();
             }
         }
 
@@ -62,6 +63,34 @@ namespace Coursework
         public void Clear()
         {
             subjects.Clear();
+        }
+        
+        public void Sort()
+        {
+            subjects.Sort((x, y) => x.Name.CompareTo(y.Name));
+        }
+        
+        public string GetStringForSaving()
+        {
+            string result = "";
+            Sort();
+
+            foreach (Subject subject in subjects)
+            {
+                result += subject.Name + ";";
+            }
+
+            return result;
+        }
+
+        public int IndexOf(ICompositeElement element)
+        {
+            if (element is Subject)
+            {
+                return subjects.IndexOf((Subject)element);
+            }
+
+            return -1;
         }
 
         public bool ContainsName(string name)
@@ -125,6 +154,7 @@ namespace Coursework
             if (chapter is Chapter)
             {
                 chapters.Add((Chapter)chapter);
+                Sort();
             }
         }
 
@@ -144,6 +174,33 @@ namespace Coursework
         public void Clear()
         {
             chapters.Clear();
+        }
+
+        public void Sort()
+        {
+            chapters.Sort((x, y) => x.Name.CompareTo(y.Name));
+        }
+
+        public string GetStringForSaving()
+        {
+            string result = "";
+
+            for (int i = 0; i < chapters.Count(); i++)
+            {
+                result += $"{chapters[i].Name},{Program.subjectsCollection.IndexOf(this)};";
+            }
+
+            return result;
+        }
+
+        public int IndexOf(ICompositeElement element)
+        {
+            if (element is Chapter)
+            {
+                return chapters.IndexOf((Chapter)element);
+            }
+
+            return -1;
         }
 
         public bool ContainsName(string name)
@@ -173,13 +230,14 @@ namespace Coursework
 
         public void ShowWholeInternalStructure()
         {
-            Console.WriteLine(name);
+            Console.WriteLine(Name);
             for (int i = 0; i < lectures.Count; i++)
             {
                 Console.Write($"  {i + 1} ");
                 lectures[i].ShowWholeInternalStructure();
             }
         }
+
         public void ShowOnlyChildren()
         {
             for (int i = 0; i < lectures.Count; i++)
@@ -206,6 +264,7 @@ namespace Coursework
             if (lecture is LectureState)
             {
                 lectures.Add((LectureState)lecture);
+                Sort();
             }
         }
 
@@ -227,6 +286,50 @@ namespace Coursework
             lectures.Clear();
         }
 
+        public void Sort()
+        {
+            lectures.Sort((x, y) => x.Name.CompareTo(y.Name));
+        }
+
+        public int IndexOf(ICompositeElement element)
+        {
+            if (element is LectureState)
+            {
+                return lectures.IndexOf((LectureState)element);
+            }
+
+            return -1;
+        }
+
+        public string GetStringForSaving()
+        { 
+            return string.Empty;
+        }
+
+        public string GetStringForSaving(Subject subject)
+        {
+            string result = "";
+            string URLs = "";
+            string filesPaths = "";
+
+
+            for (int i = 0; i < lectures.Count(); i++)
+            {
+                foreach (string URL in lectures[i].URLs)
+                {
+                    URLs += URL + " ";
+                }
+
+                foreach (string filesPath in lectures[i].FilesPaths)
+                {
+                    filesPaths += filesPath + " ";
+                }
+
+                result += $"{lectures[i].Name},{lectures[i].Text},{URLs},{filesPaths},{subject.IndexOf(this)},{Program.subjectsCollection.IndexOf(subject)};";
+            }
+
+            return string.Empty;
+        }
         public bool ContainsName(string name)
         {
             foreach (LectureState lecture in lectures)

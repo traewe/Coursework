@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +16,9 @@ namespace Coursework
         void Clear();
         void Add(ICompositeElement component);
         void Remove(ICompositeElement component);
+        void Sort();
+        string GetStringForSaving();
+        int IndexOf(ICompositeElement element);
         ICompositeElement GetChildByName(string name);
     }
     interface ICloneableLecture
@@ -68,13 +72,16 @@ namespace Coursework
         public void Clear() { }
         public void Add(ICompositeElement component) { }
         public void Remove(ICompositeElement component) { }
+        public void Sort() { }
+        public string GetStringForSaving() { return ""; }
+        public int IndexOf(ICompositeElement component) { return 0; }
         public ICompositeElement GetChildByName(string name) { return this; }
         public LectureState Clone()
         {
             return (LectureState)MemberwiseClone();
         }
     }
-    interface ISavingAndLoadingStrategy
+    public interface ISavingAndLoadingStrategy
     {
         void SaveData();
         void LoadData();

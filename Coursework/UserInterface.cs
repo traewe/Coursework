@@ -118,22 +118,50 @@ namespace Coursework
 
         public override void AddChapter(Chapter chapter)
         {
-            subjectsCollection.GetChildByName(Program.selectedSubject.Name).Add(chapter);
+            if (CheckAccess())
+            {
+                subjectsCollection.GetChildByName(Program.selectedSubject.Name).Add(chapter);
+            }
+            else
+            {
+                Console.WriteLine("У доступі відмовлено, увійдіть як адмін");
+            }
         }
 
         public override void RemoveChapter(Chapter chapter)
         {
-            subjectsCollection.GetChildByName(Program.selectedSubject.Name).Remove(chapter);
+            if (CheckAccess())
+            {
+                subjectsCollection.GetChildByName(Program.selectedSubject.Name).Remove(chapter);
+            }
+            else
+            {
+                Console.WriteLine("У доступі відмовлено, увійдіть як адмін");
+            }
         }
 
         public override void AddLecture(LectureState lecture)
         {
-            subjectsCollection.GetChildByName(Program.selectedSubject.Name).GetChildByName(Program.selectedChapter.Name).Add(lecture);
+            if (CheckAccess())
+            {
+                subjectsCollection.GetChildByName(Program.selectedSubject.Name).GetChildByName(Program.selectedChapter.Name).Add(lecture);
+            }
+            else
+            {
+                Console.WriteLine("У доступі відмовлено, увійдіть як адмін");
+            }
         }
 
         public override void RemoveLecture(LectureState lecture)
         {
-            subjectsCollection.GetChildByName(Program.selectedSubject.Name).GetChildByName(Program.selectedChapter.Name).Remove(lecture);
+            if (CheckAccess())
+            {
+                subjectsCollection.GetChildByName(Program.selectedSubject.Name).GetChildByName(Program.selectedChapter.Name).Remove(lecture);
+            }
+            else
+            {
+                Console.WriteLine("У доступі відмовлено, увійдіть як адмін");
+            }
         }
         public bool CheckAccess()
         {
