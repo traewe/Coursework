@@ -22,7 +22,7 @@ namespace Coursework
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Помилка у файлі збережень: {ex.Message}");
+                
             }
         }
 
@@ -34,7 +34,7 @@ namespace Coursework
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Помилка у файлі збережень: {ex.Message}");
+                
             }
         }
     }
@@ -45,24 +45,32 @@ namespace Coursework
         {
             try
             {
-                string[] lines = File.ReadAllLines("LectureBase.txt");
-
-                if (lines.Length > 1)
+                if (File.Exists("LectureBase.txt"))
                 {
-                    lines[1] = Program.subjectsCollection.GetStringForSaving();
-                    File.WriteAllLines("LectureBase.txt", lines);
+                    string[] lines = File.ReadAllLines("LectureBase.txt");
+
+                    if (lines.Length > 1)
+                    {
+                        lines[1] = Program.subjectsCollection.GetStringForSaving();
+                        File.WriteAllLines("LectureBase.txt", lines);
+                    }
+                    else
+                    {
+                        using (StreamWriter sw = File.AppendText("LectureBase.txt"))
+                        {
+                            sw.WriteLine("\n" + Program.subjectsCollection.GetStringForSaving());
+                        }
+                    }
                 }
                 else
                 {
-                    using (StreamWriter sw = File.AppendText("LectureBase.txt"))
-                    {
-                        sw.WriteLine("\n" + Program.subjectsCollection.GetStringForSaving());
-                    }
+                    File.AppendAllText("LectureBase.txt", "");
+                    SaveData();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Помилка у файлі збережень: {ex.Message}");
+                
             }
         }
 
@@ -82,7 +90,7 @@ namespace Coursework
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Помилка у файлі збережень: {ex.Message}");
+                
             }
         }
     }
@@ -122,7 +130,7 @@ namespace Coursework
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Помилка у файлі збережень: {ex.Message}");
+                
             }
         }
 
@@ -135,14 +143,14 @@ namespace Coursework
                     foreach (string str in File.ReadAllLines("LectureBase.txt")[2].Split(";"))
                     {
                         Program.enteredPassword = Program.rightPassword;
-                        Program.subjectsCollection[Convert.ToInt32(str.Split("+")[1])].Add(new Chapter(str.Split("+")[0]));
+                        Program.subjectsCollection[Convert.ToInt32(str.Split("|")[1])].Add(new Chapter(str.Split("|")[0]));
                         Program.enteredPassword = string.Empty;
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Помилка у файлі збережень: {ex.Message}");
+                
             }
         }
     }
@@ -185,12 +193,12 @@ namespace Coursework
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Помилка у файлі збережень: {ex.Message}");
+                
             }
         }
 
         public void LoadData()
-        {//Лекція 1+Текст+Посил+Файл+0+0+fi
+        {
             try
             {
                 if (File.ReadAllLines("LectureBase.txt").Length > 3)
@@ -203,19 +211,19 @@ namespace Coursework
                         LectureCreator adminLectureStateCreator = new AdminLectureStateCreator();
                         LectureState lecture;
 
-                        string lectureName = str.Split("+")[0];
-                        string lectureText = str.Split("+")[1];
-                        string lectureURLs = str.Split("+")[2];
-                        string lectureFilesPaths = str.Split("+")[3];
-                        int subjectIndex = Convert.ToInt32(str.Split("+")[5]);
-                        int chapterIndex = Convert.ToInt32(str.Split("+")[4]);
+                        string lectureName = str.Split("|")[0];
+                        string lectureText = str.Split("|")[1];
+                        string lectureURLs = str.Split("|")[2];
+                        string lectureFilesPaths = str.Split("|")[3];
+                        int subjectIndex = Convert.ToInt32(str.Split("|")[5]);
+                        int chapterIndex = Convert.ToInt32(str.Split("|")[4]);
 
-                        if (str.Split("+")[6] == "un")
+                        if (str.Split("|")[6] == "un")
                         {
                             Program.subjectsCollection[subjectIndex][chapterIndex].Add(unfinishedLectureStateCreator.CreateLecture(lectureName,
                                 lectureText, lectureURLs, lectureFilesPaths));
                         }
-                        else if (str.Split("+")[6] == "fi")
+                        else if (str.Split("|")[6] == "fi")
                         {
                             Program.subjectsCollection[subjectIndex][chapterIndex].Add(finishedLectureStateCreator.CreateLecture(lectureName,
                                 lectureText, lectureURLs, lectureFilesPaths));
@@ -232,7 +240,7 @@ namespace Coursework
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Помилка у файлі збережень: {ex.Message}");
+                
             }
         }
     }

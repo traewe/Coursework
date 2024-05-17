@@ -136,6 +136,10 @@ namespace Coursework
 
                             SetStrategy(new SubjectsSavingAndLoading());
                             savingAndLoadingStrategy.SaveData();
+                            SetStrategy(new ChaptersSavingAndLoading());
+                            savingAndLoadingStrategy.SaveData();
+                            SetStrategy(new LecturesSavingAndLoading());
+                            savingAndLoadingStrategy.SaveData();
                             break;
                         case 6:
                             if (rightPassword == enteredPassword)
@@ -309,6 +313,8 @@ namespace Coursework
                             }
 
                             SetStrategy(new ChaptersSavingAndLoading());
+                            savingAndLoadingStrategy.SaveData();
+                            SetStrategy(new LecturesSavingAndLoading());
                             savingAndLoadingStrategy.SaveData();
                             break;
                         case 6:

@@ -249,7 +249,7 @@ namespace Coursework
 
             for (int i = 0; i < chapters.Count(); i++)
             {
-                result += $"{chapters[i].Name}+{Program.subjectsCollection.IndexOf(this)};";
+                result += $"{chapters[i].Name}|{Program.subjectsCollection.IndexOf(this)};";
             }
 
             return result;
@@ -388,7 +388,7 @@ namespace Coursework
 
             for (int i = 0; i < lectures.Count(); i++)
             {
-                result += $"{lectures[i].Name}+{lectures[i].Text}+{string.Join(" ", lectures[i].URLs)}+{string.Join(" ", lectures[i].FilesPaths)}+{subject.IndexOf(this)}+{Program.subjectsCollection.IndexOf(subject)}+";
+                result += $"{lectures[i].Name}|{lectures[i].Text}|{string.Join(" ", lectures[i].URLs)}|{string.Join(" ", lectures[i].FilesPaths)}|{subject.IndexOf(this)}|{Program.subjectsCollection.IndexOf(subject)}|";
 
                 if (lectures[i] is UnfinishedLectureState)
                 {
