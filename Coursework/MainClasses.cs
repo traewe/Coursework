@@ -141,7 +141,25 @@ namespace Coursework
         {
             Name = name;
         }
+        public Chapter this[int index]
+        {
+            get
+            {
+                if (index >= 0 || index < chapters.Count)
+                {
+                    return chapters[index];
+                }
 
+                return null;
+            }
+            set
+            {
+                if (index >= 0 || index < chapters.Count)
+                {
+                    chapters[index] = value;
+                }
+            }
+        }
         public void ShowWholeInternalStructure()
         {
             Console.WriteLine(Name);

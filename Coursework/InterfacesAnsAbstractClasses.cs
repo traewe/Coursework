@@ -47,6 +47,7 @@ namespace Coursework
         public abstract void WriteOptionsFirstStage();
         public abstract void WriteOptionsSecondStage();
         public abstract void WriteOptionsThirdStage();
+        public abstract void WriteOptionsFourthStage();
     }
     public abstract class LectureState : ICloneableLecture, ICompositeElement
     {

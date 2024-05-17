@@ -152,7 +152,7 @@ namespace Coursework
                                 while (userInterface.subjectsCollection.ContainsName(newSubjectName) || string.IsNullOrWhiteSpace(newSubjectName) || newSubjectName.Contains('+') || newSubjectName.Contains(';'));
 
                                 Subject subjectToChange = (Subject)subjectsCollection.GetChildByName(input);
-                                
+
                                 subjectToChange.Name = newSubjectName;
                             }
 
@@ -330,7 +330,7 @@ namespace Coursework
                     }
                 }
 
-                while (selectedSubject != null && selectedChapter != null && selectedLecture == null)
+                while (selectedChapter != null && selectedLecture == null)
                 {
                     userInterface.WriteOptionsThirdStage();
 
@@ -430,16 +430,22 @@ namespace Coursework
                             savingAndLoadingStrategy.SaveData();
                             break;
                         case 6:
-                            selectedSubject.ShowOnlyChildren();
+                            selectedChapter.ShowOnlyChildren();
                             Console.WriteLine("Введіть назву розділу, якому хочете змінити назву. Або натисніть \"Enter\" з пустою відповіддю для виходу назад");
 
                             do
                             {
                                 input = Console.ReadLine();
-                            } while (!string.IsNullOrWhiteSpace(input) && !selectedSubject.ContainsName(input));
+                            } while (!string.IsNullOrWhiteSpace(input) && !selectedChapter.ContainsName(input));
 
                             if (!string.IsNullOrWhiteSpace(input))
                             {
+                                if (selectedChapter.GetChildByName(input) is not UnfinishedLectureState)
+                                {
+                                    Console.WriteLine("Ця лекція не знаходиться в обробці, тому не можливо змінити її назву");
+                                    break;
+                                }
+
                                 Console.WriteLine("Введіть нову назву розділу");
 
                                 string newChapterName;
@@ -447,20 +453,103 @@ namespace Coursework
                                 {
                                     newChapterName = Console.ReadLine();
                                 }
-                                while (selectedSubject.ContainsName(newChapterName) || string.IsNullOrWhiteSpace(newChapterName) || newChapterName.Contains("+") || newChapterName.Contains(";"));
+                                while (selectedChapter.ContainsName(newChapterName) || string.IsNullOrWhiteSpace(newChapterName) || newChapterName.Contains("+") || newChapterName.Contains(";"));
 
-                                Chapter chapterToChange = (Chapter)selectedSubject.GetChildByName(input);
+                                LectureState lectureToChange = (LectureState)selectedChapter.GetChildByName(input);
 
-                                chapterToChange.Name = newChapterName;
+                                lectureToChange.Name = newChapterName;
                             }
 
                             SetStrategy(new LecturesSavingAndLoading());
                             savingAndLoadingStrategy.SaveData();
                             break;
                         case 7:
+                            if (rightPassword == enteredPassword)
+                            {
+                                selectedChapter.ShowOnlyChildren();
+
+                                Console.WriteLine("Напишіть назву лекції, яку Ви хочете скопіювати. Або натисніть \"Enter\" з пустою відповіддю для виходу назад");
+
+                                do
+                                {
+                                    input = Console.ReadLine();
+                                } while (!string.IsNullOrWhiteSpace(input) && !selectedChapter.ContainsName(input));
+
+                                if (!string.IsNullOrWhiteSpace(input))
+                                {
+                                    subjectsCollection.ShowWholeInternalStructure();
+
+                                    Console.WriteLine("Напишіть назву розділу, в який бажаєте скопіювати обрану лекцію");
+
+                                    string chapterToCopyLectureName;
+                                    bool isChapterNameExists = false;
+
+                                    do
+                                    {
+                                        chapterToCopyLectureName = Console.ReadLine();
+
+                                        if (string.IsNullOrWhiteSpace(chapterToCopyLectureName))
+                                        {
+                                            break;
+                                        }
+
+                                        for (int i = 0; i < subjectsCollection.Count(); i++)
+                                        {
+                                            for (int j = 0; j < subjectsCollection[i].Count(); j++)
+                                            {
+                                                if (subjectsCollection[i][j].Name == chapterToCopyLectureName && !subjectsCollection[i][j].ContainsName(input))
+                                                {
+                                                    subjectsCollection[i][j].Add(((LectureState)selectedChapter.GetChildByName(input)).Clone());
+                                                    isChapterNameExists = true;
+                                                }
+                                            }
+                                        }
+                                    } while (!isChapterNameExists);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("У доступі відмовлено, увійдіть як адмін");
+                            }
+
                             break;
                         case 8:
                             selectedChapter = null;
+                            break;
+                    }
+                }
+
+                while (selectedLecture != null)
+                {
+                    userInterface.WriteOptionsThirdStage();
+
+                    while (true)
+                    {
+                        input = Console.ReadLine();
+
+                        if (int.TryParse(input, out answer))
+                        {
+                            if (answer >= 1 && answer <= 8)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Введена відповідь не відповідає вимогам. Спробуйте ще раз");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Введена відповідь не відповідає вимогам. Спробуйте ще раз");
+                        }
+                    }
+
+                    switch (answer)
+                    {
+                        case 1:
+                            subjectsCollection.ShowWholeInternalStructure();
+                            break;
+                        case 2:
                             break;
                     }
                 }

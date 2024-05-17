@@ -77,6 +77,10 @@ namespace Coursework
             Console.WriteLine("8 - Вийти у попереднє меню");
             Console.WriteLine("==============================");
         }
+        public override void WriteOptionsFourthStage()
+        {
+
+        }
     }
 
     public class AdminCheckingUserInterface : UserInterfaceAbstraction
@@ -127,6 +131,11 @@ namespace Coursework
         public override void WriteOptionsThirdStage()
         {
             userInterface.WriteOptionsThirdStage();
+        }
+
+        public override void WriteOptionsFourthStage()
+        {
+            userInterface.WriteOptionsFourthStage();
         }
 
         public override void AddChapter(Chapter chapter)
