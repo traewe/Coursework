@@ -79,7 +79,17 @@ namespace Coursework
         }
         public override void WriteOptionsFourthStage()
         {
-
+            Console.WriteLine("==============================");
+            Console.WriteLine("1 - Переглянути всю структуру (предмети - розділи - лекції)");
+            Console.WriteLine("2 - Переглянути текст лекції");
+            Console.WriteLine("3 - Відкрити посилання лекції");
+            Console.WriteLine("4 - Відкрити файли лекції");
+            Console.WriteLine("5 - Змінити текст лекції");
+            Console.WriteLine("6 - Змінити посилання лекції");
+            Console.WriteLine("7 - Змінити файли лекції");
+            Console.WriteLine("8 - Змінити статус лекції");
+            Console.WriteLine("9 - Вийти у попереднє меню");
+            Console.WriteLine("==============================");
         }
     }
 

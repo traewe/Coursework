@@ -20,7 +20,9 @@ namespace Coursework
         public static Chapter selectedChapter;
         public static LectureState selectedLecture;
         public static ISavingAndLoadingStrategy savingAndLoadingStrategy;
-        public static LectureStateBuilder lectureStateBuilder = new LectureStateBuilder();
+        public static LectureCreator unfinishedLectureStateCreator = new UnfinishedLectureStateCreator();
+        public static LectureCreator finishedLectureStateCreator = new FinishedLectureStateCreator();
+        public static LectureCreator adminLectureStateCreator = new AdminLectureStateCreator();
         public static void SetStrategy(ISavingAndLoadingStrategy strategy)
         {
             savingAndLoadingStrategy = strategy;
@@ -29,7 +31,6 @@ namespace Coursework
         {
             Console.OutputEncoding = Encoding.UTF8;
             Console.InputEncoding = Encoding.Unicode;
-
             int answer;
             string input;
             bool isProgramStopped = false;
@@ -394,13 +395,7 @@ namespace Coursework
                                     "на корисні ресурси через пробіл у формі повних посилань на сайти." +
                                     "Знов натисніть \"Enter\" і введіть повні шляхи розташування файлів лекції через пробіл");
 
-                                lectureStateBuilder.ResetForUnfinishedState();
-                                lectureStateBuilder.SetName(input);
-                                lectureStateBuilder.SetText(Console.ReadLine());
-                                lectureStateBuilder.SetURLs(Console.ReadLine());
-                                lectureStateBuilder.SetFilesPaths(Console.ReadLine());
-
-                                selectedChapter.Add(lectureStateBuilder.GetLecture());
+                                selectedChapter.Add(unfinishedLectureStateCreator.CreateLecture(input, Console.ReadLine(), Console.ReadLine(), Console.ReadLine()));
 
                                 SetStrategy(new LecturesSavingAndLoading());
                                 savingAndLoadingStrategy.SaveData();
@@ -506,6 +501,9 @@ namespace Coursework
                                         }
                                     } while (!isChapterNameExists);
                                 }
+
+                                SetStrategy(new LecturesSavingAndLoading());
+                                savingAndLoadingStrategy.SaveData();
                             }
                             else
                             {
@@ -521,7 +519,7 @@ namespace Coursework
 
                 while (selectedLecture != null)
                 {
-                    userInterface.WriteOptionsThirdStage();
+                    userInterface.WriteOptionsFourthStage();
 
                     while (true)
                     {
@@ -529,7 +527,7 @@ namespace Coursework
 
                         if (int.TryParse(input, out answer))
                         {
-                            if (answer >= 1 && answer <= 8)
+                            if (answer >= 1 && answer <= 9)
                             {
                                 break;
                             }
@@ -550,6 +548,31 @@ namespace Coursework
                             subjectsCollection.ShowWholeInternalStructure();
                             break;
                         case 2:
+                            selectedLecture.ShowText();
+                            break;
+                        case 3:
+                            selectedLecture.OpenURLs();
+                            break;
+                        case 4:
+                            selectedLecture.OpenFiles();
+                            break;
+                        case 5:
+                            Console.WriteLine("Напишіть новий текст для цієї лекції");
+
+                            selectedLecture.ChangeText(Console.ReadLine());
+                            break;
+                        case 6:
+                            Console.WriteLine("Напишіть список нових посилань на сайти через пробіл");
+
+                            selectedLecture.ChangeURLs(Console.ReadLine());
+                            break;
+                        case 7:
+                            Console.WriteLine("Напишіть список нових посилань на файли через пробіл");
+
+                            selectedLecture.ChangeFilesPaths(Console.ReadLine());
+                            break;
+                        case 9:
+                            selectedLecture = null;
                             break;
                     }
                 }

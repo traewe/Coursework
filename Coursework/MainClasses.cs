@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 namespace Coursework
 {
     public class SubjectsCollection : ICompositeElement
@@ -387,6 +388,7 @@ namespace Coursework
     }
     public class UnfinishedLectureState : LectureState
     {
+        AdminCheckingUserInterface adminCheckingUserInterface = new AdminCheckingUserInterface(Program.subjectsCollection);
         public override void ShowText()
         {
             Console.WriteLine(Text);
@@ -397,11 +399,15 @@ namespace Coursework
             {
                 try
                 {
-                    Process.Start(url);
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = url,
+                        UseShellExecute = true
+                    });
                 }
                 catch
                 {
-                    Console.WriteLine("One of URLs can't be open, try to change it");
+                    Console.WriteLine("Неможливо відкрити одне з посилань");
                 }
             }
         }
@@ -411,25 +417,43 @@ namespace Coursework
             {
                 try
                 {
-                    Process.Start(filePath);
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = filePath,
+                        UseShellExecute = true
+                    });
                 }
                 catch
                 {
-                    Console.WriteLine("One of files' paths can't be open, try to change it");
+                    Console.WriteLine("Неможливо відкрити один з файлів");
                 }
             }
         }
         public override void ChangeText(string text)
         {
-            Text = text;
+            if (adminCheckingUserInterface.CheckAccess())
+            {
+                Text = text;
+            }
         }
         public override void ChangeURLs(string urls)
         {
-            URLs = urls.Split(" ");
+            if (adminCheckingUserInterface.CheckAccess())
+            {
+                URLs = urls.Split(" ");
+            }
         }
         public override void ChangeFilesPaths(string filesPaths)
         {
-            FilesPaths = filesPaths.Split(" ");
+            if (adminCheckingUserInterface.CheckAccess())
+            {
+                FilesPaths = filesPaths.Split(" ");
+            }
+        }
+
+        public override string ShowStatus()
+        {
+            return "(в обробці)";
         }
     }
     public class FinishedLectureState : LectureState
@@ -444,11 +468,15 @@ namespace Coursework
             {
                 try
                 {
-                    Process.Start(url);
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = url,
+                        UseShellExecute = true
+                    });
                 }
                 catch
                 {
-                    Console.WriteLine("One of URLs can't be open, try to change it");
+                    Console.WriteLine("Неможливо відкрити одне з посилань");
                 }
             }
         }
@@ -458,25 +486,35 @@ namespace Coursework
             {
                 try
                 {
-                    Process.Start(filePath);
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = filePath,
+                        UseShellExecute = true
+                    });
                 }
                 catch
                 {
-                    Console.WriteLine("One of files' paths can't be open, try to change it");
+                    Console.WriteLine("Неможливо відкрити один з файлів");
                 }
             }
         }
+
+        public override string ShowStatus()
+        {
+            return "(закінчена)";
+        }
+
         public override void ChangeText(string text)
         {
-            throw new Exception("You can't change finished lecture");
+            Console.WriteLine("You can't change finished lecture");
         }
         public override void ChangeURLs(string urls)
         {
-            throw new Exception("You can't change finished lecture");
+            Console.WriteLine("You can't change finished lecture");
         }
         public override void ChangeFilesPaths(string filesPaths)
         {
-            throw new Exception("You can't change finished lecture");
+            Console.WriteLine("You can't change finished lecture");
         }
     }
     public class AdminLectureState : LectureState
@@ -502,11 +540,15 @@ namespace Coursework
             {
                 try
                 {
-                    Process.Start(url);
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = url,
+                        UseShellExecute = true
+                    });
                 }
                 catch
                 {
-                    Console.WriteLine("One of URLs can't be open, try to change it");
+                    Console.WriteLine("Неможливо відкрити одне з посилань");
                 }
             }
         }
@@ -521,40 +563,44 @@ namespace Coursework
             {
                 try
                 {
-                    Process.Start(filePath);
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = filePath,
+                        UseShellExecute = true
+                    });
                 }
                 catch
                 {
-                    Console.WriteLine("One of files' paths can't be open, try to change it");
+                    Console.WriteLine("Неможливо відкрити один з файлів");
                 }
             }
         }
+
+        public override string ShowStatus()
+        {
+            return "(для адміна)";
+        }
+
         public override void ChangeText(string text)
         {
-            if (!adminCheckingUserInterface.CheckAccess())
+            if (adminCheckingUserInterface.CheckAccess())
             {
-                return;
+                Text = text;
             }
-
-            Text = text;
         }
         public override void ChangeURLs(string urls)
         {
-            if (!adminCheckingUserInterface.CheckAccess())
+            if (adminCheckingUserInterface.CheckAccess())
             {
-                return;
+                URLs = urls.Split(" ");
             }
-
-            URLs = urls.Split(" ");
         }
         public override void ChangeFilesPaths(string filesPaths)
         {
-            if (!adminCheckingUserInterface.CheckAccess())
+            if (adminCheckingUserInterface.CheckAccess())
             {
-                return;
+                FilesPaths = filesPaths.Split(" ");
             }
-
-            FilesPaths = filesPaths.Split(" ");
         }
     }
 }

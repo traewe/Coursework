@@ -25,16 +25,9 @@ namespace Coursework
     {
         LectureState Clone();
     }
-    interface ILectureBuilder
+    public abstract class LectureCreator
     {
-        void ResetForUnfinishedState();
-        void ResetForFinishedState();
-        void ResetForAdminState();
-        void SetName(string name);
-        void SetText(string text);
-        void SetURLs(string url);
-        void SetFilesPaths(string filePath);
-        LectureState GetLecture();
+        public abstract LectureState CreateLecture(string name, string text, string urls, string filesPaths);
     }
     public abstract class UserInterfaceAbstraction
     {
@@ -61,9 +54,10 @@ namespace Coursework
         public abstract void ChangeText(string text);
         public abstract void ChangeURLs(string urls);
         public abstract void ChangeFilesPaths(string filesPaths);
+        public abstract string ShowStatus();
         public void ShowWholeInternalStructure()
         {
-            Console.WriteLine(Name);
+            Console.WriteLine($"{Name} {ShowStatus()}");
         }
 
         public void ShowOnlyChildren() { }
