@@ -33,7 +33,12 @@ namespace Coursework
         {
             for (int i = 0; i < subjects.Count; i++)
             {
+                if (Program.selectedSubject == subjects[i])
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
                 Console.Write($"{i + 1} ");
+                Console.ForegroundColor = ConsoleColor.Gray;
                 subjects[i].ShowWholeInternalStructure();
             }
         }
@@ -163,10 +168,24 @@ namespace Coursework
         }
         public void ShowWholeInternalStructure()
         {
+            if (Program.selectedSubject == this)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+
             Console.WriteLine(Name);
+            Console.ForegroundColor = ConsoleColor.Gray;
+
             for (int i = 0; i < chapters.Count; i++)
             {
+                if (Program.selectedChapter == chapters[i])
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+
                 Console.Write($" {i + 1} ");
+                Console.ForegroundColor = ConsoleColor.Gray;
+
                 chapters[i].ShowWholeInternalStructure();
             }
         }
@@ -273,10 +292,24 @@ namespace Coursework
 
         public void ShowWholeInternalStructure()
         {
+            if (Program.selectedChapter == this)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+
             Console.WriteLine(Name);
+            Console.ForegroundColor = ConsoleColor.Gray;
+
             for (int i = 0; i < lectures.Count; i++)
             {
+                if (Program.selectedLecture == lectures[i])
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+
                 Console.Write($"  {i + 1} ");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                
                 lectures[i].ShowWholeInternalStructure();
             }
         }
@@ -352,26 +385,26 @@ namespace Coursework
         public string GetStringForSaving(Subject subject)
         {
             string result = "";
-            string URLs = "";
-            string filesPaths = "";
-
 
             for (int i = 0; i < lectures.Count(); i++)
             {
-                foreach (string URL in lectures[i].URLs)
-                {
-                    URLs += URL + " ";
-                }
+                result += $"{lectures[i].Name}+{lectures[i].Text}+{string.Join(" ", lectures[i].URLs)}+{string.Join(" ", lectures[i].FilesPaths)}+{subject.IndexOf(this)}+{Program.subjectsCollection.IndexOf(subject)}+";
 
-                foreach (string filesPath in lectures[i].FilesPaths)
+                if (lectures[i] is UnfinishedLectureState)
                 {
-                    filesPaths += filesPath + " ";
+                    result += "un;";
                 }
-
-                result += $"{lectures[i].Name}\\{lectures[i].Text}\\{URLs}\\{filesPaths}\\{subject.IndexOf(this)}\\{Program.subjectsCollection.IndexOf(subject)};";
+                else if (lectures[i] is FinishedLectureState)
+                {
+                    result += "fi;";
+                }
+                else
+                {
+                    result += "ad;";
+                }
             }
 
-            return string.Empty;
+            return result;
         }
         public bool ContainsName(string name)
         {
@@ -453,7 +486,7 @@ namespace Coursework
 
         public override string ShowStatus()
         {
-            return "(в обробці)";
+            return "(в розробці)";
         }
     }
     public class FinishedLectureState : LectureState
@@ -506,15 +539,15 @@ namespace Coursework
 
         public override void ChangeText(string text)
         {
-            Console.WriteLine("You can't change finished lecture");
+            Console.WriteLine("Не можна змінити закінчену лекцію");
         }
         public override void ChangeURLs(string urls)
         {
-            Console.WriteLine("You can't change finished lecture");
+            Console.WriteLine("Не можна змінити закінчену лекцію");
         }
         public override void ChangeFilesPaths(string filesPaths)
         {
-            Console.WriteLine("You can't change finished lecture");
+            Console.WriteLine("Не можна змінити закінчену лекцію");
         }
     }
     public class AdminLectureState : LectureState
@@ -522,57 +555,63 @@ namespace Coursework
         AdminCheckingUserInterface adminCheckingUserInterface = new AdminCheckingUserInterface(Program.subjectsCollection);
         public override void ShowText()
         {
-            if (!adminCheckingUserInterface.CheckAccess())
+            if (adminCheckingUserInterface.CheckAccess())
             {
-                return;
+                Console.WriteLine(Text);
             }
-
-            Console.WriteLine(Text);
+            else
+            {
+                Console.WriteLine("Доступ відхилено, увійдіть як адмін");
+            }
         }
         public override void OpenURLs()
         {
-            if (!adminCheckingUserInterface.CheckAccess())
+            if (adminCheckingUserInterface.CheckAccess())
             {
-                return;
-            }
-
-            foreach (string url in URLs)
-            {
-                try
+                foreach (string url in URLs)
                 {
-                    Process.Start(new ProcessStartInfo
+                    try
                     {
-                        FileName = url,
-                        UseShellExecute = true
-                    });
+                        Process.Start(new ProcessStartInfo
+                        {
+                            FileName = url,
+                            UseShellExecute = true
+                        });
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Неможливо відкрити одне з посилань");
+                    }
                 }
-                catch
-                {
-                    Console.WriteLine("Неможливо відкрити одне з посилань");
-                }
+            }
+            else
+            {
+                Console.WriteLine("Доступ відхилено, увійдіть як адмін");
             }
         }
         public override void OpenFiles()
         {
-            if (!adminCheckingUserInterface.CheckAccess())
+            if (adminCheckingUserInterface.CheckAccess())
             {
-                return;
-            }
-
-            foreach (string filePath in FilesPaths)
-            {
-                try
+                foreach (string filePath in FilesPaths)
                 {
-                    Process.Start(new ProcessStartInfo
+                    try
                     {
-                        FileName = filePath,
-                        UseShellExecute = true
-                    });
+                        Process.Start(new ProcessStartInfo
+                        {
+                            FileName = filePath,
+                            UseShellExecute = true
+                        });
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Неможливо відкрити один з файлів");
+                    }
                 }
-                catch
-                {
-                    Console.WriteLine("Неможливо відкрити один з файлів");
-                }
+            }
+            else
+            {
+                Console.WriteLine("Доступ відхилено, увійдіть як адмін");
             }
         }
 
@@ -587,6 +626,10 @@ namespace Coursework
             {
                 Text = text;
             }
+            else
+            {
+                Console.WriteLine("Доступ відхилено, увійдіть як адмін");
+            }
         }
         public override void ChangeURLs(string urls)
         {
@@ -594,12 +637,20 @@ namespace Coursework
             {
                 URLs = urls.Split(" ");
             }
+            else
+            {
+                Console.WriteLine("Доступ відхилено, увійдіть як адмін");
+            }
         }
         public override void ChangeFilesPaths(string filesPaths)
         {
             if (adminCheckingUserInterface.CheckAccess())
             {
                 FilesPaths = filesPaths.Split(" ");
+            }
+            else
+            {
+                Console.WriteLine("Доступ відхилено, увійдіть як адмін");
             }
         }
     }

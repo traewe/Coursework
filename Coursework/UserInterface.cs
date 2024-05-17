@@ -55,6 +55,7 @@ namespace Coursework
         public override void WriteOptionsSecondStage()
         {
             Console.WriteLine("==============================");
+            Console.WriteLine("Обраний предмет " + Program.selectedSubject.Name);
             Console.WriteLine("1 - Переглянути всю структуру (предмети - розділи - лекції)");
             Console.WriteLine("2 - Переглянути список всіх розділів у цьому предметі");
             Console.WriteLine("3 - Перейти у певний розділ");
@@ -67,6 +68,7 @@ namespace Coursework
         public override void WriteOptionsThirdStage()
         {
             Console.WriteLine("==============================");
+            Console.WriteLine("Обраний розділ " + Program.selectedChapter.Name);
             Console.WriteLine("1 - Переглянути всю структуру (предмети - розділи - лекції)");
             Console.WriteLine("2 - Переглянути список всіх лекцій у цьому розділі");
             Console.WriteLine("3 - Перейти у певну лекцію");
@@ -80,6 +82,7 @@ namespace Coursework
         public override void WriteOptionsFourthStage()
         {
             Console.WriteLine("==============================");
+            Console.WriteLine("Обрана лекція " + Program.selectedLecture.Name);
             Console.WriteLine("1 - Переглянути всю структуру (предмети - розділи - лекції)");
             Console.WriteLine("2 - Переглянути текст лекції");
             Console.WriteLine("3 - Відкрити посилання лекції");

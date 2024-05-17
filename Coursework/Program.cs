@@ -27,6 +27,10 @@ namespace Coursework
         {
             savingAndLoadingStrategy = strategy;
         }
+        public static void ChangeLectureState(LectureState newLectureState)
+        {
+            selectedLecture = newLectureState;
+        }
         static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
@@ -45,6 +49,8 @@ namespace Coursework
                 SetStrategy(new SubjectsSavingAndLoading());
                 savingAndLoadingStrategy.LoadData();
                 SetStrategy(new ChaptersSavingAndLoading());
+                savingAndLoadingStrategy.LoadData();
+                SetStrategy(new LecturesSavingAndLoading());
                 savingAndLoadingStrategy.LoadData();
             }
 
@@ -132,33 +138,41 @@ namespace Coursework
                             savingAndLoadingStrategy.SaveData();
                             break;
                         case 6:
-                            subjectsCollection.ShowOnlyChildren();
-                            Console.WriteLine("Введіть назву предмету, якому хочете змінити назву. Або натисніть \"Enter\" з пустою " +
-                                "відповіддю для виходу назад");
-
-                            do
+                            if (rightPassword == enteredPassword)
                             {
-                                input = Console.ReadLine();
-                            } while (!string.IsNullOrWhiteSpace(input) && !userInterface.subjectsCollection.ContainsName(input));
+                                subjectsCollection.ShowOnlyChildren();
+                                Console.WriteLine("Введіть назву предмету, якому хочете змінити назву. Або натисніть \"Enter\" з пустою " +
+                                    "відповіддю для виходу назад");
 
-                            if (!string.IsNullOrWhiteSpace(input))
-                            {
-                                Console.WriteLine("Введіть нову назву предмету");
-
-                                string newSubjectName;
                                 do
                                 {
-                                    newSubjectName = Console.ReadLine();
+                                    input = Console.ReadLine();
+                                } while (!string.IsNullOrWhiteSpace(input) && !userInterface.subjectsCollection.ContainsName(input));
+
+                                if (!string.IsNullOrWhiteSpace(input))
+                                {
+                                    Console.WriteLine("Введіть нову назву предмету");
+
+                                    string newSubjectName;
+                                    do
+                                    {
+                                        newSubjectName = Console.ReadLine();
+                                    }
+                                    while (userInterface.subjectsCollection.ContainsName(newSubjectName) || string.IsNullOrWhiteSpace(newSubjectName) || newSubjectName.Contains('+') || newSubjectName.Contains(';'));
+
+                                    Subject subjectToChange = (Subject)subjectsCollection.GetChildByName(input);
+
+                                    subjectToChange.Name = newSubjectName;
                                 }
-                                while (userInterface.subjectsCollection.ContainsName(newSubjectName) || string.IsNullOrWhiteSpace(newSubjectName) || newSubjectName.Contains('+') || newSubjectName.Contains(';'));
 
-                                Subject subjectToChange = (Subject)subjectsCollection.GetChildByName(input);
-
-                                subjectToChange.Name = newSubjectName;
+                                SetStrategy(new SubjectsSavingAndLoading());
+                                savingAndLoadingStrategy.SaveData();
+                            }
+                            else
+                            {
+                                Console.WriteLine("У доступі відмовлено, увійдіть як адмін");
                             }
 
-                            SetStrategy(new SubjectsSavingAndLoading());
-                            savingAndLoadingStrategy.SaveData();
                             break;
                         case 7:
                             if (string.IsNullOrEmpty(rightPassword))
@@ -298,32 +312,39 @@ namespace Coursework
                             savingAndLoadingStrategy.SaveData();
                             break;
                         case 6:
-                            selectedSubject.ShowOnlyChildren();
-                            Console.WriteLine("Введіть назву розділу, якому хочете змінити назву. Або натисніть \"Enter\" з пустою відповіддю для виходу назад");
-
-                            do
+                            if (enteredPassword == rightPassword)
                             {
-                                input = Console.ReadLine();
-                            } while (!string.IsNullOrWhiteSpace(input) && !selectedSubject.ContainsName(input));
+                                selectedSubject.ShowOnlyChildren();
+                                Console.WriteLine("Введіть назву розділу, якому хочете змінити назву. Або натисніть \"Enter\" з пустою відповіддю для виходу назад");
 
-                            if (!string.IsNullOrWhiteSpace(input))
-                            {
-                                Console.WriteLine("Введіть нову назву розділу");
-
-                                string newChapterName;
                                 do
                                 {
-                                    newChapterName = Console.ReadLine();
+                                    input = Console.ReadLine();
+                                } while (!string.IsNullOrWhiteSpace(input) && !selectedSubject.ContainsName(input));
+
+                                if (!string.IsNullOrWhiteSpace(input))
+                                {
+                                    Console.WriteLine("Введіть нову назву розділу");
+
+                                    string newChapterName;
+                                    do
+                                    {
+                                        newChapterName = Console.ReadLine();
+                                    }
+                                    while (selectedSubject.ContainsName(newChapterName) || string.IsNullOrWhiteSpace(newChapterName) || newChapterName.Contains("+") || newChapterName.Contains(";"));
+
+                                    Chapter chapterToChange = (Chapter)selectedSubject.GetChildByName(input);
+
+                                    chapterToChange.Name = newChapterName;
                                 }
-                                while (selectedSubject.ContainsName(newChapterName) || string.IsNullOrWhiteSpace(newChapterName) || newChapterName.Contains("+") || newChapterName.Contains(";"));
 
-                                Chapter chapterToChange = (Chapter)selectedSubject.GetChildByName(input);
-
-                                chapterToChange.Name = newChapterName;
+                                SetStrategy(new ChaptersSavingAndLoading());
+                                savingAndLoadingStrategy.SaveData();
                             }
-
-                            SetStrategy(new ChaptersSavingAndLoading());
-                            savingAndLoadingStrategy.SaveData();
+                            else
+                            {
+                                Console.WriteLine("У доступі відмовлено, увійдіть як адмін");
+                            }
                             break;
                         case 7:
                             selectedSubject = null;
@@ -557,19 +578,78 @@ namespace Coursework
                             selectedLecture.OpenFiles();
                             break;
                         case 5:
+                            Console.WriteLine("Старий текст лекції: " + selectedLecture.Text);
                             Console.WriteLine("Напишіть новий текст для цієї лекції");
-
                             selectedLecture.ChangeText(Console.ReadLine());
+
+                            SetStrategy(new LecturesSavingAndLoading());
+                            savingAndLoadingStrategy.SaveData();
                             break;
                         case 6:
+                            Console.Write("Старі посилання: ");
+                            foreach (string url in selectedLecture.URLs)
+                            {
+                                Console.WriteLine(url + " ");
+                            }
+                            Console.WriteLine();
                             Console.WriteLine("Напишіть список нових посилань на сайти через пробіл");
-
                             selectedLecture.ChangeURLs(Console.ReadLine());
+
+                            SetStrategy(new LecturesSavingAndLoading());
+                            savingAndLoadingStrategy.SaveData();
                             break;
                         case 7:
-                            Console.WriteLine("Напишіть список нових посилань на файли через пробіл");
-
+                            Console.Write("Старі шляхи файлів: ");
+                            foreach (string filePath in selectedLecture.FilesPaths)
+                            {
+                                Console.WriteLine(filePath + " ");
+                            }
+                            Console.WriteLine();
+                            Console.WriteLine("Напишіть список нових шляхів на файли через пробіл");
                             selectedLecture.ChangeFilesPaths(Console.ReadLine());
+
+                            SetStrategy(new LecturesSavingAndLoading());
+                            savingAndLoadingStrategy.SaveData();
+                            break;
+                        case 8:
+                            if (selectedLecture is not UnfinishedLectureState)
+                            {
+                                Console.WriteLine("Статус лекції вже було змінено");
+                                break;
+                            }
+
+                            if (rightPassword == enteredPassword)
+                            {
+                                Console.WriteLine("Ви можете змінити статус лекції на \"закінчена\" (подальше редагування буде неможливим)" +
+                                    " або на \"для адміна\" (перегляд лише для адміна). Статус можна змінити лише один раз." +
+                                    " Напишіть \"закінчена\" або \"для адміна\" для зміни статусу");
+                                input = Console.ReadLine();
+
+                                if (input == "закінчена")
+                                {
+                                    selectedChapter.Remove(selectedLecture);
+                                    LectureState newLectureState = finishedLectureStateCreator.CreateLecture(selectedLecture.Name, selectedLecture.Text,
+                                        string.Join(" ", selectedLecture.URLs), string.Join(" ", selectedLecture.FilesPaths));
+                                    ChangeLectureState(newLectureState);
+                                    selectedChapter.Add(selectedLecture);
+                                }
+                                else if (input == "для адміна")
+                                {
+                                    selectedChapter.Remove(selectedLecture);
+                                    LectureState newLectureState = adminLectureStateCreator.CreateLecture(selectedLecture.Name, selectedLecture.Text,
+                                        string.Join(" ", selectedLecture.URLs), string.Join(" ", selectedLecture.FilesPaths));
+                                    ChangeLectureState(newLectureState);
+                                    selectedChapter.Add(selectedLecture);
+                                }
+
+                                SetStrategy(new LecturesSavingAndLoading());
+                                savingAndLoadingStrategy.SaveData();
+                            }
+                            else
+                            {
+                                Console.WriteLine("У доступі відмовлено, увійдіть як адмін");
+                            }
+
                             break;
                         case 9:
                             selectedLecture = null;

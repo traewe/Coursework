@@ -15,6 +15,7 @@ namespace Coursework
             lecture.Text = text;
             lecture.URLs = urls.Split(" ");
             lecture.FilesPaths = filesPaths.Split(" ");
+
             return lecture;
         }
     }
@@ -27,6 +28,7 @@ namespace Coursework
             lecture.Text = text;
             lecture.URLs = urls.Split(" ");
             lecture.FilesPaths = filesPaths.Split(" ");
+
             return lecture;
         }
     }
@@ -39,6 +41,7 @@ namespace Coursework
             lecture.Text = text;
             lecture.URLs = urls.Split(" ");
             lecture.FilesPaths = filesPaths.Split(" ");
+
             return lecture;
         }
     }

@@ -57,7 +57,13 @@ namespace Coursework
         public abstract string ShowStatus();
         public void ShowWholeInternalStructure()
         {
+            if (Program.selectedLecture == this)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+
             Console.WriteLine($"{Name} {ShowStatus()}");
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         public void ShowOnlyChildren() { }
