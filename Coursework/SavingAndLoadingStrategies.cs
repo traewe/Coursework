@@ -84,7 +84,6 @@ namespace Coursework
                     {
                         Program.enteredPassword = Program.rightPassword;
                         Program.userInterface.AddSubject(new Subject(str));
-                        Program.enteredPassword = string.Empty;
                     }
                 }
             }
@@ -92,6 +91,8 @@ namespace Coursework
             {
                 
             }
+
+            Program.enteredPassword = string.Empty;
         }
     }
 
@@ -144,7 +145,6 @@ namespace Coursework
                     {
                         Program.enteredPassword = Program.rightPassword;
                         Program.subjectsCollection[Convert.ToInt32(str.Split("|")[1])].Add(new Chapter(str.Split("|")[0]));
-                        Program.enteredPassword = string.Empty;
                     }
                 }
             }
@@ -152,6 +152,8 @@ namespace Coursework
             {
                 
             }
+
+            Program.enteredPassword = string.Empty;
         }
     }
 
@@ -195,6 +197,8 @@ namespace Coursework
             {
                 
             }
+
+            Program.enteredPassword = string.Empty;
         }
 
         public void LoadData()
@@ -233,8 +237,6 @@ namespace Coursework
                             Program.subjectsCollection[subjectIndex][chapterIndex].Add(adminLectureStateCreator.CreateLecture(lectureName,
                                 lectureText, lectureURLs, lectureFilesPaths));
                         }
-
-                        Program.enteredPassword = string.Empty;
                     }
                 }
             }
@@ -242,6 +244,8 @@ namespace Coursework
             {
                 
             }
+
+            Program.enteredPassword = string.Empty;
         }
     }
 }

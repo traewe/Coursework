@@ -13,9 +13,9 @@ namespace Coursework
     {
         public static string enteredPassword;
         public static string rightPassword;
-        public static UserInterfaceAbstraction userInterface;
-        public static SubjectsCollection subjectsCollection;
-        public static IPasswordChecker passwordChecker;
+        public static SubjectsCollection subjectsCollection = new SubjectsCollection();
+        public static UserInterfaceAbstraction userInterface = new AdminCheckingUserInterface(subjectsCollection);
+        public static IPasswordChecker passwordChecker = new PasswordLengthChecker();
         public static Subject selectedSubject;
         public static Chapter selectedChapter;
         public static LectureState selectedLecture;
@@ -35,24 +35,21 @@ namespace Coursework
         {
             Console.OutputEncoding = Encoding.UTF8;
             Console.InputEncoding = Encoding.Unicode;
+
             int answer;
             string input;
             bool isProgramStopped = false;
-            subjectsCollection = new SubjectsCollection();
-            userInterface = new AdminCheckingUserInterface(subjectsCollection);
-            passwordChecker = new PasswordLengthChecker();
 
-            if (File.Exists("LectureBase.txt"))
-            {
-                SetStrategy(new PasswordSavingAndLoading());
-                savingAndLoadingStrategy.LoadData();
-                SetStrategy(new SubjectsSavingAndLoading());
-                savingAndLoadingStrategy.LoadData();
-                SetStrategy(new ChaptersSavingAndLoading());
-                savingAndLoadingStrategy.LoadData();
-                SetStrategy(new LecturesSavingAndLoading());
-                savingAndLoadingStrategy.LoadData();
-            }
+            SetStrategy(new PasswordSavingAndLoading());
+            savingAndLoadingStrategy.LoadData();
+            SetStrategy(new SubjectsSavingAndLoading());
+            savingAndLoadingStrategy.LoadData();
+            SetStrategy(new ChaptersSavingAndLoading());
+            savingAndLoadingStrategy.LoadData();
+            SetStrategy(new LecturesSavingAndLoading());
+            savingAndLoadingStrategy.LoadData();
+
+            enteredPassword = "";
 
             while (!isProgramStopped)
             {
